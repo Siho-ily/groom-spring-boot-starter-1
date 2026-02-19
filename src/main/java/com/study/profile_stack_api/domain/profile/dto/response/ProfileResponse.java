@@ -14,7 +14,7 @@ public class ProfileResponse {
     private String email;               // 이메일
     private String bio;                 // 자기소개
     private String position;            // 포지션
-    private String position_icon;       // 포지션 아이콘`
+    private String positionIcon;       // 포지션 아이콘`
     private Integer careerYears;        // 경력 연차
     private String githubUrl;           // GitHub 주소
     private String blogUrl;             // 블로그 주소
@@ -29,7 +29,7 @@ public class ProfileResponse {
         profileResponse.email = profile.getEmail();
         profileResponse.bio = profile.getBio();
         profileResponse.position = profile.getPosition().getDescription();
-        profileResponse.position_icon = profile.getPosition().getIcon();
+        profileResponse.positionIcon = profile.getPosition().getIcon();
         profileResponse.careerYears = profile.getCareerYears();
         profileResponse.githubUrl = profile.getGithubUrl();
         profileResponse.blogUrl = profile.getBlogUrl();

@@ -21,6 +21,6 @@ spring:
 logging:
   level:
     root: INFO
-    com.study.myspringstudydiary: DEBUG
+    com.study.profile_stack_api: DEBUG
     org.springframework.jdbc: DEBUG
     com.zaxxer.hikari: DEBUG

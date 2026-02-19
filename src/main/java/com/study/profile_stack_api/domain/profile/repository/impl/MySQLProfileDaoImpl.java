@@ -8,6 +8,7 @@ import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.ApiException;
 import com.study.profile_stack_api.global.exception.ErrorCode;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,10 +22,10 @@ import java.util.Optional;
 
 @Repository
 @Primary
-public class MySQLStudyLogDaoImpl implements ProfileDao {
+public class MySQLProfileDaoImpl implements ProfileDao {
     // DB 접근을 도와주는 jdbc 유틸
     private final JdbcTemplate jdbcTemplate;
-    public MySQLStudyLogDaoImpl(JdbcTemplate jdbcTemplate) {this.jdbcTemplate = jdbcTemplate;}
+    public MySQLProfileDaoImpl(JdbcTemplate jdbcTemplate) {this.jdbcTemplate = jdbcTemplate;}
 
     // === Create ===
     @Override
@@ -62,7 +63,7 @@ public class MySQLStudyLogDaoImpl implements ProfileDao {
         try {
             Profile profile = jdbcTemplate.queryForObject(sql, profileRowMapper, id);
             return Optional.ofNullable(profile);
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }

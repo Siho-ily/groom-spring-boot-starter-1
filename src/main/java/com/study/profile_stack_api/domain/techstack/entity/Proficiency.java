@@ -7,9 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Proficiency {
     // 인스턴스
-    BIGINNER("입문", "🌱"),
-    INTERMADIATE("중급", "🌿"),
-    ADVENCED("고급", "🌳"),
+    BEGINNER("입문", "🌱"),
+    INTERMEDIATE("중급", "🌿"),
+    ADVANCED("고급", "🌳"),
     EXPERT("전문가", "🏆");
 
     // 필드

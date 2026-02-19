@@ -32,11 +32,11 @@ public class ProfileService {
                 null,
                 request.getName().trim(),
                 request.getEmail().trim(),
-                request.getBio().trim(),
+                request.getBio() != null ? request.getBio().trim() : null,
                 Position.valueOf(request.getPosition()),
                 request.getCareerYears(),
-                request.getGithubUrl().trim(),
-                request.getBlogUrl().trim(),
+                request.getGithubUrl() != null ? request.getGithubUrl().trim() : null,
+                request.getBlogUrl() != null ? request.getBlogUrl().trim() : null,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -87,7 +87,7 @@ public class ProfileService {
         }
 
         // 5. Entity 업데이트 (Profile)
-        profile.update(null, request.getName(), request.getEmail(), request.getBio(), position,  request.getCareerYears(), request.getGithubUrl());
+        profile.update(null, request.getName(), request.getEmail(), request.getBio(), position,  request.getCareerYears(), request.getGithubUrl(), request.getBlogUrl());
 
         // 6. 저장 및 응답 반환
         repository.update(profile);
@@ -121,7 +121,7 @@ public class ProfileService {
         if (request.getEmail() == null) {
             throw new ApiException(ErrorCode.INVALID_INPUT, "이메일은 필수 입력입니다.");
         } else {
-            validateEmail(request.getEmail());
+            validateEmail(request.getEmail(), true);
         }
 
         // 바이오
@@ -164,7 +164,7 @@ public class ProfileService {
 
         // 이메일
         if (request.getEmail() != null) {
-            validateEmail(request.getEmail());
+            validateEmail(request.getEmail(), false);
         }
 
         // 바이오
@@ -204,14 +204,14 @@ public class ProfileService {
 
     }
 
-    private void validateEmail(String email) {
+    private void validateEmail(String email, boolean checkExisted) {
         if (email.trim().isEmpty()) {
             throw new ApiException(ErrorCode.INVALID_INPUT, "이메일은 입력으로 빈 문자열을 가질 수 없습니다.");
         }
         if (email.length() > 100) {
             throw new ApiException(ErrorCode.INVALID_INPUT, "이메일은 1자 이상, 100자 이하여야 합니다.");
         }
-        if (repository.existsByEmail(email)) {
+        if (checkExisted && repository.existsByEmail(email)) {
             throw new ApiException(ErrorCode.DUPLICATE_EMAIL, "이미 존재하는 이메일 주소입니다.");
         }
     }

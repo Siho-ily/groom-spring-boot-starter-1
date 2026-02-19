@@ -33,7 +33,6 @@ public class ProfileController {
     public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfilesWithPaging(@RequestParam Integer page, @RequestParam Integer size) {
         // service를 호출해서 page, size값을 전달하여 데이터 가져오기
         Page<ProfileResponse> responses = profileService.getProfileWithPaging(page, size);
-        System.out.println(responses);
         return ResponseEntity.ok().body(ApiResponse.success(responses));
     }
 
