@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
+import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,10 +8,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/profiles/{profileId}/tech-stacks")
 public class TechStackController {
-    // === TechStack API ===
+    private final TechStackService service;
+
+    public TechStackController(TechStackService service) {this.service = service;}
+
     // GET
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> getTechStack(@PathVariable Long profileId, @PathVariable String id) {
+    public ResponseEntity<ApiResponse<String>> getTechStackById(@PathVariable Long profileId, @PathVariable String id) {
+
         return ResponseEntity.ok().body(ApiResponse.success(
                 "getTechStack | profileId: %s, id: %s".formatted(profileId, id)
         ));
