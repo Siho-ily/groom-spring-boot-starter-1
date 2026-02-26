@@ -5,8 +5,8 @@ import com.study.profile_stack_api.domain.profile.entity.Position;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.global.common.Page;
-import com.study.profile_stack_api.global.exception.ApiException;
-import com.study.profile_stack_api.global.exception.ErrorCode;
+import com.study.profile_stack_api.global.error.ErrorCode;
+import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -118,7 +118,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
                 profile.getId());
 
         if (updated == 0) {
-            throw new ApiException(ErrorCode.PROFILE_NOT_FOUND);
+            throw new ProfileNotFoundException(profile.getId());
         }
 
         return profile;
@@ -131,7 +131,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         String sql = "delete from profile where id = ?";
         int updated = jdbcTemplate.update(sql, id);
         if (updated == 0) {
-            throw new ApiException(ErrorCode.PROFILE_NOT_FOUND);
+            throw new ProfileNotFoundException(id);
         }
         return true;
     }
