@@ -16,7 +16,7 @@ public class Profile {
     private String name;                // 이름
     private String email;               // 이메일
     private String bio;                 // 자기소개
-    private Position position;            // 직무
+    private Position position;          // 직무
     private Integer careerYears;        // 경력 연차
     private String githubUrl;           // GitHub 주소
     private String blogUrl;             // 블로그 주소
