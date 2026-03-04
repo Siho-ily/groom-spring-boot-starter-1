@@ -6,6 +6,7 @@ import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
