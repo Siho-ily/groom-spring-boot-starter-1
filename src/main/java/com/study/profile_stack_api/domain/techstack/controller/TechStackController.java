@@ -1,7 +1,9 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
+import com.study.profile_stack_api.global.common.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,19 +15,19 @@ public class TechStackController {
     public TechStackController(TechStackService service) {this.service = service;}
 
     // GET
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> getTechStackById(@PathVariable Long profileId, @PathVariable String id) {
+    @GetMapping("/{techStackId}")
+    public ResponseEntity<ApiResponse<TechStackResponse>> getTechStack(@PathVariable Long profileId, @PathVariable Long techStackId) {
+        TechStackResponse response = service.getTechStackById(profileId, techStackId);
 
         return ResponseEntity.ok().body(ApiResponse.success(
-                "getTechStack | profileId: %s, id: %s".formatted(profileId, id)
+                response
         ));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<String>> getAllTechStacks(@PathVariable Long profileId) {
-        return ResponseEntity.ok().body(ApiResponse.success(
-                "getTechStack | profileId: %s,".formatted(profileId)
-        ));
+    public ResponseEntity<ApiResponse<Page<TechStackResponse>>> getTechStacksWithPage(@PathVariable Long profileId, @RequestParam Integer page, @RequestParam Integer size) {
+        Page<TechStackResponse> response = service.getTechStacksWithPage(profileId,  page, size);
+        return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
     // POST

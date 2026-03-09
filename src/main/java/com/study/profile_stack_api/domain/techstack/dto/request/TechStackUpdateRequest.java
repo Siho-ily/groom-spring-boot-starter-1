@@ -2,10 +2,11 @@ package com.study.profile_stack_api.domain.techstack.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class TechStackUpdateRequest {
     private String name;            // 기술명 (1 ~ 50자)
     private String category;        // 기술 카테고리
