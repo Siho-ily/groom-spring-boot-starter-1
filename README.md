@@ -234,7 +234,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 
 - [x]  Entity 클래스 작성 (TechStack, TechCategory Enum, Proficiency Enum)
 - [x]  DTO 클래스 작성 (CreateRequest, UpdateRequest, Response)
-- [ ]  TechStackDao 인터페이스 정의
+- [x]  TechStackDao 인터페이스 정의
 - [ ]  TechStackDaoImpl 구현 (profileId를 활용한 쿼리 주의)
 - [ ]  TechStackRepository 구현
 - [ ]  TechStackService 구현 (프로필 존재 여부 검증 포함)

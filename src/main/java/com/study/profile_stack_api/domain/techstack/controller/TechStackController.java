@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
+import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
@@ -32,10 +33,9 @@ public class TechStackController {
 
     // POST
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> addTechStack(@PathVariable Long profileId) {
-        return ResponseEntity.ok().body(ApiResponse.success(
-                "addTechStack | profileId: %s".formatted(profileId)
-        ));
+    public ResponseEntity<ApiResponse<TechStackResponse>> addTechStack(@PathVariable Long profileId, @RequestBody TechStackCreateRequest request) {
+        TechStackResponse response = service.createTechStack(profileId, request);
+        return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
     // PUT
