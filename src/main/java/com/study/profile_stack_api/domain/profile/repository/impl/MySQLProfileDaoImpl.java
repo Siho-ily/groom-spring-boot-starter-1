@@ -68,7 +68,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         }
     }
 
-    public Page<ProfileResponse> findWithPage(int page, int size) {
+    public Page<Profile> findWithPage(int page, int size) {
         long totalElements = count();
 
         int totalPages = (int) Math.ceil((double) totalElements / size);
@@ -77,18 +77,12 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         String sql = "select * from profile limit ? offset ?";
         List<Profile> content = jdbcTemplate.query(sql, profileRowMapper, size, offset);
 
-        // Entity -> DTO
-        List<ProfileResponse> profileResponses = content
-                .stream()
-                .map(ProfileResponse::from)
-                .toList();
-
         boolean first = (page == 0);
         boolean last = (page >= totalPages - 1);     // totalPages=0이면 last 처리 주의
         boolean hasPrevious = (page > 0 && page <= totalPages);
         boolean hasNext = (page + 1 < totalPages);
 
-        return new Page<>(profileResponses, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
+        return new Page<>(content, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
     }
 
 

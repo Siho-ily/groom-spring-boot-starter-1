@@ -15,7 +15,7 @@ public interface ProfileDao {
 
     // === Read ===
     Optional<Profile> findById(Long id);                        // 단건 조회
-    Page<ProfileResponse> findWithPage(int offset, int limit);          // 페이징 조회
+    Page<Profile> findWithPage(int offset, int limit);          // 페이징 조회
     List<Profile> findByPosition(String position);              // 포지션으로 조회
 
     // === Update ===

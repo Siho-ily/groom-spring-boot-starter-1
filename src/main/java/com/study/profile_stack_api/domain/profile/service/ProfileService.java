@@ -14,6 +14,7 @@ import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,7 +66,21 @@ public class ProfileService {
             throw new BusinessException(ErrorCode.INVALID_INPUT, "잘못된 입력 값입니다. page: %d, size: %d".formatted(page, size));
         }
 
-        return repository.findWithPage(page, size);
+        Page<Profile> profilePage = repository.findWithPage(page, size);
+        List<ProfileResponse> content = profilePage.getContent().stream()
+                .map(ProfileResponse::from)
+                .toList();
+
+        return new Page<>(content,
+                    profilePage.getPage(),
+                    profilePage.getSize(),
+                    profilePage.getTotalElements(),
+                    profilePage.getTotalPages(),
+                    profilePage.isFirst(),
+                    profilePage.isLast(),
+                    profilePage.isHasPrevious(),
+                    profilePage.isHasNext()
+                );
     }
 
     // === Update ===

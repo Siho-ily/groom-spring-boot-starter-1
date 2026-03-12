@@ -72,7 +72,7 @@ public class MySQLTechStackImpl implements TechStackDao {
     }
 
     @Override
-    public Page<TechStackResponse> findWithPage(Long profileId, int page, int size) {
+    public Page<TechStack> findWithPage(Long profileId, int page, int size) {
         long totalElements = countByProfileId(profileId);
 
         int totalPages = (int) Math.ceil((double) totalElements / size);
@@ -81,22 +81,21 @@ public class MySQLTechStackImpl implements TechStackDao {
         String sql = "select * from tech_stack where profile_id = ? limit ? offset ?";
         List<TechStack> techStacks = jdbcTemplate.query(sql, techStackRowMapper, profileId, size, offset);
 
-        // Entity -> DTO
-        List<TechStackResponse> techStackResponses = techStacks
-                .stream()
-                .map(TechStackResponse::from)
-                .toList();
-
         boolean first = (page == 0);
         boolean last = (page >= totalPages - 1);     // totalPages=0이면 last 처리 주의
         boolean hasPrevious = (page > 0 && page <= totalPages);
         boolean hasNext = (page + 1 < totalPages);
 
-        return new Page<>(techStackResponses, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
+        return new Page<>(techStacks, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
     }
 
     @Override
-    public Page<TechStackResponse> findByCategory(int page, int limit, String category) {
+    public Page<TechStack> findByCategory(TechCategory category, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public Page<TechStack> findByProficiency(Proficiency proficiency, int page, int size) {
         return null;
     }
 

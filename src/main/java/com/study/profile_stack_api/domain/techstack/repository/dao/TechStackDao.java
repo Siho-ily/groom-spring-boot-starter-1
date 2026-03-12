@@ -1,6 +1,8 @@
 package com.study.profile_stack_api.domain.techstack.repository.dao;
 
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
+import com.study.profile_stack_api.domain.techstack.entity.Proficiency;
+import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.global.common.Page;
 
@@ -14,10 +16,11 @@ public interface TechStackDao {
     // === Read ===
     Optional<TechStack> findById(Long profileId, Long techStackId);                 // id로 단건 조회
 
+    Page<TechStack> findWithPage(Long profileId, int page, int size);               // 페이징 조회
 
-    Page<TechStackResponse> findWithPage(Long profileId, int page, int size);            // 페이징 조회
+    Page<TechStack> findByCategory(TechCategory category, int page, int size);            // 페이징 조회 - 카테고리 필터링
 
-    Page<TechStackResponse> findByCategory(int page, int size, String category);           // 페이징 조회 - 카테고리 필터링
+    Page<TechStack> findByProficiency(Proficiency proficiency, int page, int size);                     // 페이징 조회 - 숙련도 필터링
 
     // === Update ===
     TechStack update(Long profileId, Long techStackId, TechStack techStack);

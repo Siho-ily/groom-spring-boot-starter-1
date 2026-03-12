@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,21 @@ public class TechStackService {
     }
 
     public Page<TechStackResponse> getTechStacksWithPage(Long profileId, int page, int limit) {
-        return repository.findWithPage(profileId, page, limit);
+        Page<TechStack> techStackPage = repository.findWithPage(profileId, page, limit);
+        List<TechStackResponse> content = techStackPage.getContent().stream()
+                .map(TechStackResponse::from)
+                .toList();
+        return new Page<>(
+                content,
+                techStackPage.getPage(),
+                techStackPage.getSize(),
+                techStackPage.getTotalElements(),
+                techStackPage.getTotalPages(),
+                techStackPage.isFirst(),
+                techStackPage.isLast(),
+                techStackPage.isHasPrevious(),
+                techStackPage.isHasNext()
+        );
     }
 
     // === POST ===
