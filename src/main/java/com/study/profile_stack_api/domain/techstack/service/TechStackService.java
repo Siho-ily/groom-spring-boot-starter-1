@@ -3,6 +3,7 @@ package com.study.profile_stack_api.domain.techstack.service;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.entity.Proficiency;
 import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
@@ -78,6 +79,11 @@ public class TechStackService {
     }
 
     // === DELETE ===
+    public TechStackDeleteResponse deleteTechStack(Long techStackId) {
+        repository.delete(techStackId);
+
+        return TechStackDeleteResponse.of(techStackId);
+    }
 
     // === Utils ===
     // profileId 검증

@@ -2,6 +2,7 @@ package com.study.profile_stack_api.domain.techstack.controller;
 
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
@@ -48,9 +49,8 @@ public class TechStackController {
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteTechStack(@PathVariable Long profileId, @PathVariable String id) {
-        return ResponseEntity.ok().body(ApiResponse.success(
-                "deleteTechStack | profileId: %s, id: %s".formatted(profileId, id)
-        ));
+    public ResponseEntity<ApiResponse<TechStackDeleteResponse>> deleteTechStack(@PathVariable Long profileId, @PathVariable Long id) {
+        TechStackDeleteResponse response = service.deleteTechStack(id);
+        return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 }

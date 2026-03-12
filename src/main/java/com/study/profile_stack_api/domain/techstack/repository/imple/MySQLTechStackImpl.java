@@ -126,8 +126,17 @@ public class MySQLTechStackImpl implements TechStackDao {
 
     // === Delete ===
     @Override
-    public boolean delete(Long profileId, Long techStackId) {
-        return false;
+    public boolean delete(Long techStackId) {
+        if (!existsById(techStackId)) throw new TechStackNotFoundException(techStackId);
+
+        String sql = "delete from tech_stack where id=?";
+        int updated = jdbcTemplate.update(sql, techStackId);
+
+        if(updated == 0){
+            throw new TechStackNotFoundException(techStackId);
+        }
+
+        return true;
     }
 
     // === Utils ===

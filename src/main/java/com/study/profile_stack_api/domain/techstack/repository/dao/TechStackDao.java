@@ -23,7 +23,7 @@ public interface TechStackDao {
     TechStack update(Long profileId, Long techStackId, TechStack techStack);
 
     // === Delete ===
-    boolean delete(Long profileId, Long techStackId);
+    boolean delete(Long techStackId);
 
     // === Utils ===
     long countByProfileId(Long profileId);                                               // 전체 데이터의 갯수 확인
