@@ -1,6 +1,7 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
+import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
@@ -40,10 +41,9 @@ public class TechStackController {
 
     // PUT
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> updateTechStack(@PathVariable Long profileId, @PathVariable String id) {
-        return ResponseEntity.ok().body(ApiResponse.success(
-                "updateTechStack | profileId: %s, id: %s".formatted(profileId, id)
-        ));
+    public ResponseEntity<ApiResponse<TechStackResponse>> updateTechStack(@PathVariable Long profileId, @PathVariable Long id, @RequestBody TechStackUpdateRequest request) {
+        TechStackResponse response = service.updateTechStack(profileId, id, request);
+        return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
     // DELETE

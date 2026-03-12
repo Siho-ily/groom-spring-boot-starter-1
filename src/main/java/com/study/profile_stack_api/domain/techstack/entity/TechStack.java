@@ -21,10 +21,8 @@ public class TechStack {
     private LocalDateTime createdAt;    // 생성 일시
     private LocalDateTime updatedAt;    // 수정 일시
 
-    public void update(Long id, Long profileId, String name, TechCategory category, Proficiency proficiency, Integer yearsOfExp) {
+    public void update(String name, TechCategory category, Proficiency proficiency, Integer yearsOfExp) {
         // null이 아닌 필드만 수정
-        if (id != null) {this.id = id;}
-        if (profileId != null) {this.profileId = profileId;}
         if (name != null) {this.name = name;}
         if (category != null) {this.category = category;}
         if (proficiency != null) {this.proficiency = proficiency;}

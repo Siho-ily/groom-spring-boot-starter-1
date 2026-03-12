@@ -2,9 +2,10 @@ package com.study.profile_stack_api.domain.techstack.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum Proficiency {
     // 인스턴스
     BEGINNER("입문", "🌱"),

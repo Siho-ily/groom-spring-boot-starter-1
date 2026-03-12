@@ -9,6 +9,7 @@ import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.TechStackNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -102,7 +103,25 @@ public class MySQLTechStackImpl implements TechStackDao {
     // === Update ===
     @Override
     public TechStack update(Long profileId, Long techStackId, TechStack techStack) {
-        return null;
+        String sql = """
+                update tech_stack
+                set name = ?, category = ?, proficiency = ?, years_of_exp = ?
+                where id=?
+                """;
+
+        int updated = jdbcTemplate.update(sql,
+                techStack.getName(),
+                techStack.getCategory().name(),
+                techStack.getProficiency().name(),
+                techStack.getYearsOfExp(),
+                techStackId
+        );
+
+        if(updated == 0){
+            throw new TechStackNotFoundException(techStackId);
+        }
+
+        return techStack;
     }
 
     // === Delete ===
@@ -120,8 +139,10 @@ public class MySQLTechStackImpl implements TechStackDao {
     }
 
     @Override
-    public boolean existsById(Long profileId, Long techStackId) {
-        return false;
+    public boolean existsById(Long id) {
+        String sql = "select count(*) from profile where id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
     }
 
 

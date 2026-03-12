@@ -27,5 +27,5 @@ public interface TechStackDao {
 
     // === Utils ===
     long countByProfileId(Long profileId);                                               // 전체 데이터의 갯수 확인
-    boolean existsById(Long profileId, Long techStackId);                                // profileId의 프로파일에 techStackId에 해당하는 데이터가 존재하는지 확인
+    boolean existsById(Long techStackId);                                // profileId의 프로파일에 techStackId에 해당하는 데이터가 존재하는지 확인
 }

@@ -147,14 +147,17 @@ public class MySQLProfileDaoImpl implements ProfileDao {
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+        String sql = "select count(*) from profile where id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
     }
 
     @Override
     public boolean existsByEmail(String email) {
         String sql = "select count(*) from profile where email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
-        return count != null && count > 0;}
+        return count != null && count > 0;
+    }
 
 
     // === RowMapper ===
