@@ -60,13 +60,16 @@ public class ProfileService {
         return ProfileResponse.from(profile);
     }
 
-    public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size) {
+    public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size, String name, String position) {
         // 검증
-        if (page == null || page < 0 || size == null || size <= 0) {
+        if (page != null && page < 0 || size != null && size <= 0) {
             throw new BusinessException(ErrorCode.INVALID_INPUT, "잘못된 입력 값입니다. page: %d, size: %d".formatted(page, size));
         }
+        if (name != null) validateName(name);
+        if (position != null) validatePosition(position);
 
-        Page<Profile> profilePage = repository.findWithPage(page, size);
+        // 조회
+        Page<Profile> profilePage = repository.findWithPage(page, size, name, position);
         List<ProfileResponse> content = profilePage.getContent().stream()
                 .map(ProfileResponse::from)
                 .toList();

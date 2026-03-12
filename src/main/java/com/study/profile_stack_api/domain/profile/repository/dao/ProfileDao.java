@@ -15,8 +15,7 @@ public interface ProfileDao {
 
     // === Read ===
     Optional<Profile> findById(Long id);                        // 단건 조회
-    Page<Profile> findWithPage(int offset, int limit);          // 페이징 조회
-    List<Profile> findByPosition(String position);              // 포지션으로 조회
+    Page<Profile> findWithPage(Integer offset, Integer limit, String name, String position);          // 페이징 조회
 
     // === Update ===
     Profile update(Profile profile);                  // 프로필 수정
@@ -26,7 +25,7 @@ public interface ProfileDao {
 
 
     // utils
-    long count();                                               // 전체 데이터의 갯수 확인
+    long count(String name, String position);                                               // 전체 데이터의 갯수 확인
     boolean existsById(Long id);                                // id에 해당하는 데이터가 존재하는지 확인
     boolean existsByEmail(String email);                        // email에 해당하는 데이터가 존재하는지 확인(email 중복 체크)
 

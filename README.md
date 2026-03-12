@@ -244,7 +244,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 ### Phase 5: 페이징 & 검색
 
 - [x]  프로필 목록 페이징 구현 (findAllWithPaging)
-- [ ]  프로필 검색 구현 (이름 검색, 직무 필터링)
+- [x]  프로필 검색 구현 (이름 검색, 직무 필터링)
 - [ ]  기술 스택 목록 페이징 구현 (findByProfileIdWithPaging)
 - [ ]  기술 스택 검색 구현 (카테고리, 숙련도 필터링)
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,27 +69,64 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         }
     }
 
-    public Page<Profile> findWithPage(int page, int size) {
-        long totalElements = count();
+    public Page<Profile> findWithPage(Integer page, Integer size, String name, String position) {
+        boolean paging = page != null && size != null;
 
-        int totalPages = (int) Math.ceil((double) totalElements / size);
-        int offset = page * size;
+        StringBuilder sql = new StringBuilder("""
+        select * from profile
+        where 1=1
+    """);
 
-        String sql = "select * from profile limit ? offset ?";
-        List<Profile> content = jdbcTemplate.query(sql, profileRowMapper, size, offset);
+        List<Object> params = new ArrayList<>();
 
-        boolean first = (page == 0);
-        boolean last = (page >= totalPages - 1);     // totalPages=0이면 last 처리 주의
-        boolean hasPrevious = (page > 0 && page <= totalPages);
-        boolean hasNext = (page + 1 < totalPages);
+        if (name != null && !name.isBlank()) {
+            sql.append(" and name like ? ");
+            params.add("%" + name + "%");
+        }
 
-        return new Page<>(content, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
-    }
+        if (position != null && !position.isBlank()) {
+            sql.append(" and position like ? ");
+            params.add("%" + position + "%");
+        }
 
+        long totalElements = count(name, position);
 
-    @Override
-    public List<Profile> findByPosition(String position) {
-        return List.of();
+        int totalPages = 1;
+        int currentPage = 0;
+        int currentSize = (size == null ? (int) totalElements : size);
+
+        if (paging) {
+            int offset = page * size;
+            sql.append(" limit ? offset ? ");
+            params.add(size);
+            params.add(offset);
+
+            totalPages = (int) Math.ceil((double) totalElements / size);
+            currentPage = page;
+        }
+
+        List<Profile> content = jdbcTemplate.query(
+                sql.toString(),
+                profileRowMapper,
+                params.toArray()
+        );
+
+        boolean first = !paging || currentPage == 0;
+        boolean last = !paging || currentPage >= totalPages - 1;
+        boolean hasPrevious = paging && currentPage > 0;
+        boolean hasNext = paging && currentPage + 1 < totalPages;
+
+        return new Page<>(
+                content,
+                currentPage,
+                currentSize,
+                totalElements,
+                totalPages,
+                first,
+                last,
+                hasPrevious,
+                hasNext
+        );
     }
 
 
@@ -133,10 +171,29 @@ public class MySQLProfileDaoImpl implements ProfileDao {
 
     // === Utils ===
     @Override
-    public long count() {
-        String sql = "select count(*) from profile";
-        Long count = jdbcTemplate.queryForObject(sql, Long.class);
-        return count == null ? 0 : count;
+    public long count(String name, String position) {
+        StringBuilder sql = new StringBuilder("""
+        select count(*) from profile
+        where 1=1
+    """);
+
+        List<Object> params = new ArrayList<>();
+
+        if (name != null && !name.isBlank()) {
+            sql.append(" and name like ? ");
+            params.add("%" + name + "%");
+        }
+
+        if (position != null && !position.isBlank()) {
+            sql.append(" and position like ? ");
+            params.add("%" + position + "%");
+        }
+
+        return jdbcTemplate.queryForObject(
+                sql.toString(),
+                Long.class,
+                params.toArray()
+        );
     }
 
     @Override

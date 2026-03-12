@@ -30,9 +30,14 @@ public class ProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfilesWithPaging(@RequestParam Integer page, @RequestParam Integer size) {
+    public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfilesWithPaging
+            (@RequestParam(required = false) Integer page,
+             @RequestParam(required = false) Integer size,
+             @RequestParam(required = false) String name,
+             @RequestParam(required = false) String position) {
+        // findAllWithPaging
         // service를 호출해서 page, size값을 전달하여 데이터 가져오기
-        Page<ProfileResponse> responses = profileService.getProfileWithPaging(page, size);
+        Page<ProfileResponse> responses = profileService.getProfileWithPaging(page, size, name, position);
         return ResponseEntity.ok().body(ApiResponse.success(responses));
     }
 
