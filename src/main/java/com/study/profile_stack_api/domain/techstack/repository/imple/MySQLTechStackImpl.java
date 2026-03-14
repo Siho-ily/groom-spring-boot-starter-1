@@ -1,9 +1,5 @@
 package com.study.profile_stack_api.domain.techstack.repository.imple;
 
-
-import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
-import com.study.profile_stack_api.domain.profile.entity.Profile;
-import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.entity.Proficiency;
 import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;

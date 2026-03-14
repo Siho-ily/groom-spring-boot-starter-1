@@ -1,6 +1,5 @@
 package com.study.profile_stack_api.domain.techstack.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

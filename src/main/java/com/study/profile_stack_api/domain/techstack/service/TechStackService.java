@@ -117,10 +117,6 @@ public class TechStackService {
         }
     }
 
-    private void existsTechStackId(Long techStackId) {
-        if (techStackId != null && repository.existsById(techStackId));
-    }
-
     // update request 유효성 검사
     private void validationUpdateTechStackRequest(Long profileId, Long techStackId, TechStackUpdateRequest request) {
         if(request.hasNoUpdates()) {
@@ -128,18 +124,9 @@ public class TechStackService {
         }
 
         existsProfileId(profileId);
-        existsTechStackId(techStackId);
 
         if(request.getName() != null) {
             validationName(request.getName());
-        }
-
-        if(request.getCategory() != null) {
-            validationCategory(TechCategory.valueOf(request.getCategory()));
-        }
-
-        if(request.getProficiency() != null) {
-            validationProficiency(Proficiency.valueOf(request.getProficiency()));
         }
 
         if(request.getYearOfExp() != null) {
@@ -159,15 +146,6 @@ public class TechStackService {
         }
     }
 
-    private void validationCategory(TechCategory category) {
-        if (category == null) {
-
-        }
-    }
-
-    private void validationProficiency(Proficiency proficiency) {
-
-    }
 
     private void validationYearsOfExp(Integer yearsOfExp) {
         if (yearsOfExp < 0) {

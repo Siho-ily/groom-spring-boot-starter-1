@@ -1,8 +1,5 @@
 package com.study.profile_stack_api.domain.techstack.repository.dao;
 
-import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
-import com.study.profile_stack_api.domain.techstack.entity.Proficiency;
-import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.global.common.Page;
 
