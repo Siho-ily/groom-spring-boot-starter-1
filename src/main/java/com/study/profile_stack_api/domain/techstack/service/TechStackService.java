@@ -10,10 +10,10 @@ import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
-import com.study.profile_stack_api.global.exception.InvalidRequestField;
-import com.study.profile_stack_api.global.exception.NoUpdateRequestField;
-import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
-import com.study.profile_stack_api.global.exception.TechStackNotFoundException;
+import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
+import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
+import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
+import com.study.profile_stack_api.global.exception.domain.techstack.TechStackNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +36,10 @@ public class TechStackService {
     public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, String category, String proficiency) {
         // validation
         if (category != null && !TechCategory.exists(category)) {
-            throw new InvalidRequestField("category", category);
+            throw new InvalidRequestValueException("category", category);
         }
         if (proficiency != null && !Proficiency.exists(proficiency)) {
-            throw new InvalidRequestField("proficiency", proficiency);
+            throw new InvalidRequestValueException("proficiency", proficiency);
         }
 
         Page<TechStack> techStackPage = repository.findWithPage(page, limit, profileId, category, proficiency);
@@ -120,7 +120,7 @@ public class TechStackService {
     // update request 유효성 검사
     private void validationUpdateTechStackRequest(Long profileId, Long techStackId, TechStackUpdateRequest request) {
         if(request.hasNoUpdates()) {
-            throw new NoUpdateRequestField();
+            throw new NoUpdateRequestValueException();
         }
 
         existsProfileId(profileId);
@@ -142,14 +142,14 @@ public class TechStackService {
     // validate
     private void validationName(String name) {
         if (name.length() < 50) {
-            throw new InvalidRequestField("name", name);
+            throw new InvalidRequestValueException("name", name);
         }
     }
 
 
     private void validationYearsOfExp(Integer yearsOfExp) {
         if (yearsOfExp < 0) {
-            throw new InvalidRequestField("yearsOfExp", yearsOfExp.toString());
+            throw new InvalidRequestValueException("yearsOfExp", yearsOfExp.toString());
         }
     }
 }

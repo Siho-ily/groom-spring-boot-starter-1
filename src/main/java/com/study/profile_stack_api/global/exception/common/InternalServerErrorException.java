@@ -1,6 +1,6 @@
-package com.study.profile_stack_api.global.exception;
+package com.study.profile_stack_api.global.exception.common;
 
-import com.study.profile_stack_api.global.error.ErrorCode;
+import com.study.profile_stack_api.global.exception.BusinessException;
 
 public class InternalServerErrorException extends BusinessException {
     public InternalServerErrorException() {

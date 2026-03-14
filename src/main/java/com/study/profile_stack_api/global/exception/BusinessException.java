@@ -1,6 +1,6 @@
 package com.study.profile_stack_api.global.exception;
 
-import com.study.profile_stack_api.global.error.ErrorCode;
+import com.study.profile_stack_api.global.exception.common.ErrorCode;
 import lombok.Getter;
 
 @Getter

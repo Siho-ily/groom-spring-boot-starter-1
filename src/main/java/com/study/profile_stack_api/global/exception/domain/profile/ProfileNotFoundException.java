@@ -1,6 +1,7 @@
-package com.study.profile_stack_api.global.exception;
+package com.study.profile_stack_api.global.exception.domain.profile;
 
-import com.study.profile_stack_api.global.error.ErrorCode;
+import com.study.profile_stack_api.global.exception.common.ErrorCode;
+import com.study.profile_stack_api.global.exception.BusinessException;
 
 public class ProfileNotFoundException extends BusinessException {
     public ProfileNotFoundException(Long id) {

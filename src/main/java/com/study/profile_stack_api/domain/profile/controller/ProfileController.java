@@ -7,6 +7,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
+import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +32,10 @@ public class ProfileController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfilesWithPaging
-            (@RequestParam(required = false) Integer page,
-             @RequestParam(required = false) Integer size,
-             @RequestParam(required = false) String name,
-             @RequestParam(required = false) String position) {
+            (@Nullable @RequestParam Integer page,
+             @Nullable @RequestParam Integer size,
+             @Nullable @RequestParam String name,
+             @Nullable @RequestParam String position) {
         // findAllWithPaging
         // service를 호출해서 page, size값을 전달하여 데이터 가져오기
         Page<ProfileResponse> responses = profileService.getProfileWithPaging(page, size, name, position);

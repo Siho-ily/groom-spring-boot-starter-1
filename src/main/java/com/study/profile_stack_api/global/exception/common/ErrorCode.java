@@ -1,4 +1,4 @@
-package com.study.profile_stack_api.global.error;
+package com.study.profile_stack_api.global.exception.common;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ public enum ErrorCode {
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PROFILE_NOT_FOUND"),
     TECH_STACK_NOT_FOUND(HttpStatus.NOT_FOUND, "TECH_STACK_NOT_FOUND"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR"),
+    DUPLICATE_MEMBER_ID(HttpStatus.CONFLICT, "DUPLICATE_MEMBER_ID"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "DUPLICATE_EMAIL");
 
     private final HttpStatus status;
