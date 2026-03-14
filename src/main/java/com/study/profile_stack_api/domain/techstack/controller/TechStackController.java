@@ -7,6 +7,7 @@ import com.study.profile_stack_api.domain.techstack.dto.response.TechStackRespon
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
+import jakarta.annotation.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,13 @@ public class TechStackController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<TechStackResponse>>> getTechStacksWithPage(@PathVariable Long profileId, @RequestParam Integer page, @RequestParam Integer size) {
-        Page<TechStackResponse> response = service.getTechStacksWithPage(profileId,  page, size);
+    public ResponseEntity<ApiResponse<Page<TechStackResponse>>> getTechStacksWithPage
+            (@PathVariable Long profileId,
+             @RequestParam Integer page,
+             @RequestParam Integer size,
+             @Nullable @RequestParam String category,
+             @Nullable @RequestParam String proficiency) {
+        Page<TechStackResponse> response = service.getTechStacksWithPage(page, size, profileId, category, proficiency);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
@@ -49,7 +55,7 @@ public class TechStackController {
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<TechStackDeleteResponse>> deleteTechStack(@PathVariable Long profileId, @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TechStackDeleteResponse>> deleteTechStack(@PathVariable Long id) {
         TechStackDeleteResponse response = service.deleteTechStack(id);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }

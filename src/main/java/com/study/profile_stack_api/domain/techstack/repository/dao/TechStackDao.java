@@ -16,11 +16,7 @@ public interface TechStackDao {
     // === Read ===
     Optional<TechStack> findById(Long profileId, Long techStackId);                 // id로 단건 조회
 
-    Page<TechStack> findWithPage(Long profileId, int page, int size);               // 페이징 조회
-
-    Page<TechStack> findByCategory(TechCategory category, int page, int size);            // 페이징 조회 - 카테고리 필터링
-
-    Page<TechStack> findByProficiency(Proficiency proficiency, int page, int size);                     // 페이징 조회 - 숙련도 필터링
+    Page<TechStack> findWithPage(Integer page, Integer size, Long profileId, String category, String proficiency);               // 페이징 조회
 
     // === Update ===
     TechStack update(Long profileId, Long techStackId, TechStack techStack);
@@ -29,6 +25,6 @@ public interface TechStackDao {
     boolean delete(Long techStackId);
 
     // === Utils ===
-    long countByProfileId(Long profileId);                                               // 전체 데이터의 갯수 확인
+    long count(Long profileId, String category, String proficiency);                                             // 전체 데이터의 갯수 확인
     boolean existsById(Long techStackId);                                // profileId의 프로파일에 techStackId에 해당하는 데이터가 존재하는지 확인
 }

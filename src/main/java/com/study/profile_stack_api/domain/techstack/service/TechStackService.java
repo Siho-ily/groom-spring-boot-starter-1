@@ -11,6 +11,7 @@ import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.InvalidRequestField;
+import com.study.profile_stack_api.global.exception.NoUpdateRequestField;
 import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import com.study.profile_stack_api.global.exception.TechStackNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,16 @@ public class TechStackService {
         return TechStackResponse.from(techStack);
     }
 
-    public Page<TechStackResponse> getTechStacksWithPage(Long profileId, int page, int limit) {
-        Page<TechStack> techStackPage = repository.findWithPage(profileId, page, limit);
+    public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, String category, String proficiency) {
+        // validation
+        if (category != null && !TechCategory.exists(category)) {
+            throw new InvalidRequestField("category", category);
+        }
+        if (proficiency != null && !Proficiency.exists(proficiency)) {
+            throw new InvalidRequestField("proficiency", proficiency);
+        }
+
+        Page<TechStack> techStackPage = repository.findWithPage(page, limit, profileId, category, proficiency);
         List<TechStackResponse> content = techStackPage.getContent().stream()
                 .map(TechStackResponse::from)
                 .toList();
@@ -115,7 +124,7 @@ public class TechStackService {
     // update request 유효성 검사
     private void validationUpdateTechStackRequest(Long profileId, Long techStackId, TechStackUpdateRequest request) {
         if(request.hasNoUpdates()) {
-            throw new InvalidRequestField("수정할 필드가 없습니다.");
+            throw new NoUpdateRequestField();
         }
 
         existsProfileId(profileId);

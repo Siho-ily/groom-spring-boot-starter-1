@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,31 +73,65 @@ public class MySQLTechStackImpl implements TechStackDao {
     }
 
     @Override
-    public Page<TechStack> findWithPage(Long profileId, int page, int size) {
-        long totalElements = countByProfileId(profileId);
+    public Page<TechStack> findWithPage(Integer page, Integer size, Long profileId, String category, String proficiency) {
+        boolean paging = page != null && size != null;
 
-        int totalPages = (int) Math.ceil((double) totalElements / size);
-        int offset = page * size;
+        StringBuilder sql = new StringBuilder("""
+                select * from tech_stack
+                where profile_id = ?
+                """);
 
-        String sql = "select * from tech_stack where profile_id = ? limit ? offset ?";
-        List<TechStack> techStacks = jdbcTemplate.query(sql, techStackRowMapper, profileId, size, offset);
+        List<Object> params = new ArrayList<>();
+        params.add(profileId);
 
-        boolean first = (page == 0);
-        boolean last = (page >= totalPages - 1);     // totalPages=0이면 last 처리 주의
-        boolean hasPrevious = (page > 0 && page <= totalPages);
-        boolean hasNext = (page + 1 < totalPages);
+        if (category != null && !category.isBlank()) {
+            sql.append(" and category like ? ");
+            params.add("%" + category + "%");
+        }
 
-        return new Page<>(techStacks, page, size, totalElements, totalPages, first, last, hasPrevious, hasNext);
-    }
+        if (proficiency != null && !proficiency.isBlank()) {
+            sql.append(" and proficiency like ? ");
+            params.add("%" + proficiency + "%");
+        }
 
-    @Override
-    public Page<TechStack> findByCategory(TechCategory category, int page, int size) {
-        return null;
-    }
+        long totalElements = count(profileId, category, proficiency);
 
-    @Override
-    public Page<TechStack> findByProficiency(Proficiency proficiency, int page, int size) {
-        return null;
+        int totalPages = 1;
+        int currentPage = 0;
+        int currentSize = (size == null ? (int) totalElements : size);
+
+        if (paging) {
+            int offset = page * size;
+            sql.append(" limit ? offset ? ");
+            params.add(size);
+            params.add(offset);
+
+            totalPages = (int) Math.ceil((double) totalElements / size);
+            currentPage = page;
+        }
+
+        List<TechStack> content = jdbcTemplate.query(
+                sql.toString(),
+                techStackRowMapper,
+                params.toArray()
+        );
+
+        boolean first = !paging || currentPage == 0;
+        boolean last = !paging || currentPage >= totalPages - 1;
+        boolean hasPrevious = paging && currentPage > 0;
+        boolean hasNext = paging && currentPage + 1 < totalPages;
+
+        return new Page<>(
+                content,
+                currentPage,
+                currentSize,
+                totalElements,
+                totalPages,
+                first,
+                last,
+                hasPrevious,
+                hasNext
+        );
     }
 
     // === Update ===
@@ -140,10 +175,30 @@ public class MySQLTechStackImpl implements TechStackDao {
 
     // === Utils ===
     @Override
-    public long countByProfileId(Long profileId) {
-        String sql = "select count(*) from tech_stack where profile_id = ?";
-        Long count = jdbcTemplate.queryForObject(sql, Long.class, profileId);
-        return count == null ? 0 : count;
+    public long count(Long profileId, String category, String proficiency) {
+        StringBuilder sql = new StringBuilder("""
+            select count(*) from tech_stack
+            where profile_id = ?
+        """);
+
+        List<Object> params = new ArrayList<>();
+        params.add(profileId);
+
+        if (category != null && !category.isBlank()) {
+            sql.append(" and category like ? ");
+            params.add("%" + category + "%");
+        }
+
+        if (proficiency != null && !proficiency.isBlank()) {
+            sql.append(" and proficiency like ? ");
+            params.add("%" + proficiency + "%");
+        }
+
+        return jdbcTemplate.queryForObject(
+                sql.toString(),
+                Long.class,
+                params.toArray()
+        );
     }
 
     @Override

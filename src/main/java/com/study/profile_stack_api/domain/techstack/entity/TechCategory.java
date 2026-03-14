@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum TechCategory {
@@ -18,4 +20,10 @@ public enum TechCategory {
     // 필드
     private final String description;
     private final String icon;
+
+    // 검증
+    public static boolean exists(String name) {
+        return Arrays.stream(values())
+                .anyMatch(e -> e.name().equals(name));
+    }
 }
