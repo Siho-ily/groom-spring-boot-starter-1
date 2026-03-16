@@ -105,7 +105,7 @@ public class TechStackService {
     public TechStackDeleteResponse deleteTechStack(Long techStackId) {
         repository.delete(techStackId);
 
-        return TechStackDeleteResponse.of(techStackId);
+        return TechStackDeleteResponse.from(techStackId);
     }
 
     // === Utils ===

@@ -5,13 +5,11 @@ import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class TechStackResponse {
     /**
      *  {
@@ -37,17 +35,15 @@ public class TechStackResponse {
     private LocalDateTime updatedAt;    // 수정 일시
 
     public static TechStackResponse from(TechStack techStack) {
-        TechStackResponse techStackResponse = new TechStackResponse();
-
-        techStackResponse.id = techStack.getId();
-        techStackResponse.profileId = techStack.getProfileId();
-        techStackResponse.name = techStack.getName();
-        techStackResponse.category = techStack.getCategory();
-        techStackResponse.proficiency = techStack.getProficiency();
-        techStackResponse.yearsOfExp = techStack.getYearsOfExp();
-        techStackResponse.createdAt = techStack.getCreatedAt();
-        techStackResponse.updatedAt = techStack.getUpdatedAt();
-
-        return techStackResponse;
+        return new TechStackResponse(
+                techStack.getId(),
+                techStack.getProfileId(),
+                techStack.getName(),
+                techStack.getCategory(),
+                techStack.getProficiency(),
+                techStack.getYearsOfExp(),
+                techStack.getCreatedAt(),
+                techStack.getUpdatedAt()
+        );
     }
 }

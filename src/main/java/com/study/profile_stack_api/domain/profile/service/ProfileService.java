@@ -132,7 +132,7 @@ public class ProfileService {
         repository.deleteById(id);
 
         // 3. 삭제 결과 반환
-        return ProfileDeleteResponse.of(id);
+        return ProfileDeleteResponse.from(id);
     }
 
     // ===============================================
