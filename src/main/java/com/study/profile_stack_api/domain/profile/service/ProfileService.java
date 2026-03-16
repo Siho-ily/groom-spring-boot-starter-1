@@ -15,6 +15,7 @@ import com.study.profile_stack_api.global.exception.validation.request.Duplicate
 import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.RequiredRequestValueException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,10 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
     // ProfileDao 인터페이스로 컨트롤
     private final ProfileDao repository;
-    // IoC에 의한 종속성 주입
-    public ProfileService(ProfileDao profileDao) {this.repository = profileDao;}
 
     // === Create ===
     public ProfileResponse createProfile(ProfileCreateRequest request) {

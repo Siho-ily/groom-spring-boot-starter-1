@@ -8,15 +8,15 @@ import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/profiles/{profileId}/tech-stacks")
+@RequiredArgsConstructor
 public class TechStackController {
     private final TechStackService service;
-
-    public TechStackController(TechStackService service) {this.service = service;}
 
     // GET
     @GetMapping("/{techStackId}")
