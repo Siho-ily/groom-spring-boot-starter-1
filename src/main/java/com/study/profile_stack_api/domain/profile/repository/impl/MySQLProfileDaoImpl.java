@@ -213,6 +213,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
     // === RowMapper ===
     private final RowMapper<Profile> profileRowMapper = (row, index) -> Profile.builder()
             .id(row.getLong("id"))
+            .memberId(row.getLong("member_id"))
             .name(row.getString("name"))
             .email(row.getString("email"))
             .bio(row.getString("bio"))

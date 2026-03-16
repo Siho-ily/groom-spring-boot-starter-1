@@ -250,7 +250,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 
 ### Phase 6: 테스트 코드 (보너스)
 
-- [ ]  ProfileDao 통합 테스트
+- [x]  ProfileDao 통합 테스트
 - [ ]  TechStackDao 통합 테스트
 - [ ]  페이징 경계 조건 테스트 (첫 페이지, 마지막 페이지, 빈 페이지)
 
