@@ -206,16 +206,14 @@ public class MySQLTechStackImpl implements TechStackDao {
 
 
     // === RowMapper ===
-    private final RowMapper<TechStack> techStackRowMapper = (row, index) -> {
-        TechStack techStack = new TechStack();
-        techStack.setId(row.getLong("id"));
-        techStack.setProfileId(row.getLong("profile_id"));
-        techStack.setName(row.getString("name"));
-        techStack.setCategory(TechCategory.valueOf(row.getString("category")));
-        techStack.setProficiency(Proficiency.valueOf(row.getString("proficiency")));
-        techStack.setYearsOfExp(row.getInt("years_of_exp"));
-        techStack.setCreatedAt(row.getTimestamp("created_at").toLocalDateTime());
-        techStack.setUpdatedAt(row.getTimestamp("updated_at").toLocalDateTime());
-        return techStack;
-    };
+    private final RowMapper<TechStack> techStackRowMapper = (row, index) -> TechStack.builder()
+            .id(row.getLong("id"))
+            .profileId(row.getLong("profile_id"))
+            .name(row.getString("name"))
+            .category(TechCategory.valueOf(row.getString("category")))
+            .proficiency(Proficiency.valueOf(row.getString("proficiency")))
+            .yearsOfExp(row.getInt("years_of_exp"))
+            .createdAt(row.getTimestamp("created_at").toLocalDateTime())
+            .updatedAt(row.getTimestamp("updated_at").toLocalDateTime())
+            .build();
 }

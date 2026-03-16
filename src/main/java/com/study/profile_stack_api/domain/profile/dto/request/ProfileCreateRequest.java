@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ProfileCreateRequest {
+    private Long memberId;
     private String name;
     private String email;
     private String bio;

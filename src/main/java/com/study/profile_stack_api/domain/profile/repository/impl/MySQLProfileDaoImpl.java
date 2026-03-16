@@ -29,21 +29,22 @@ public class MySQLProfileDaoImpl implements ProfileDao {
     // === Create ===
     @Override
     public Profile save(Profile profile) {
-        String sql = "insert into profile(name, email, bio, position, career_years, github_url, blog_url, created_at, updated_at) values(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into profile(member_id, name, email, bio, position, career_years, github_url, blog_url, created_at, updated_at) values(?,?,?,?,?,?,?,?,?,?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"ID"});
-            ps.setString(1,profile.getName());
-            ps.setString(2,profile.getEmail());
-            ps.setString(3,profile.getBio());
-            ps.setString(4,profile.getPosition().name());
-            ps.setInt(5,profile.getCareerYears());
-            ps.setString(6,profile.getGithubUrl());
-            ps.setString(7,profile.getBlogUrl());
-            ps.setTimestamp(8, Timestamp.valueOf(profile.getCreatedAt()));
-            ps.setTimestamp(9, Timestamp.valueOf(profile.getUpdatedAt()));
+            ps.setLong(1, profile.getMemberId());
+            ps.setString(2,profile.getName());
+            ps.setString(3,profile.getEmail());
+            ps.setString(4,profile.getBio());
+            ps.setString(5,profile.getPosition().name());
+            ps.setInt(6,profile.getCareerYears());
+            ps.setString(7,profile.getGithubUrl());
+            ps.setString(8,profile.getBlogUrl());
+            ps.setTimestamp(9, Timestamp.valueOf(profile.getCreatedAt()));
+            ps.setTimestamp(10, Timestamp.valueOf(profile.getUpdatedAt()));
             return ps;
         }, keyHolder);
 
@@ -210,18 +211,16 @@ public class MySQLProfileDaoImpl implements ProfileDao {
 
 
     // === RowMapper ===
-    private final RowMapper<Profile> profileRowMapper = (row, index) -> {
-        Profile profile = new Profile();
-        profile.setId(row.getLong("id"));
-        profile.setName(row.getString("name"));
-        profile.setEmail(row.getString("email"));
-        profile.setBio(row.getString("bio"));
-        profile.setPosition(Position.valueOf(row.getString("position")));
-        profile.setCareerYears(row.getInt("career_years"));
-        profile.setGithubUrl(row.getString("github_url"));
-        profile.setBlogUrl(row.getString("blog_url"));
-        profile.setCreatedAt(row.getTimestamp("created_at").toLocalDateTime());
-        profile.setUpdatedAt(row.getTimestamp("updated_at").toLocalDateTime());
-        return profile;
-    };
+    private final RowMapper<Profile> profileRowMapper = (row, index) -> Profile.builder()
+            .id(row.getLong("id"))
+            .name(row.getString("name"))
+            .email(row.getString("email"))
+            .bio(row.getString("bio"))
+            .position(Position.valueOf(row.getString("position")))
+            .careerYears(row.getInt("career_years"))
+            .githubUrl(row.getString("github_url"))
+            .blogUrl(row.getString("blog_url"))
+            .createdAt(row.getTimestamp("created_at").toLocalDateTime())
+            .updatedAt(row.getTimestamp("updated_at").toLocalDateTime())
+            .build();
 }

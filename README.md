@@ -258,8 +258,8 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 
 ### Phase 1: Lombok 적용
 
-- [ ]  `build.gradle`에 Lombok 의존성 추가
-- [ ]  모든 Entity 클래스에 `@Getter`, `@Setter`, `@NoArgsConstructor`, `@Builder` 적용
+- [x]  `build.gradle`에 Lombok 의존성 추가
+- [x]  모든 Entity 클래스에 `@Getter`, `@Setter`, `@NoArgsConstructor`, `@Builder` 적용
 - [ ]  모든 Request DTO에 `@Getter`, `@NoArgsConstructor` 적용
 - [ ]  모든 Response DTO에 `@Getter`, `@Builder` (또는 `@AllArgsConstructor`) 적용
 - [ ]  모든 Service, Controller에 `@RequiredArgsConstructor` 적용하여 생성자 주입 코드 제거

@@ -61,18 +61,17 @@ public class TechStackService {
 
     // === POST ===
     public TechStackResponse createTechStack(Long profileId, TechStackCreateRequest request) {
-        TechStack techStack = new TechStack();
-        techStack.setProfileId(profileId);
-        techStack.setName(request.getName());
-        techStack.setCategory(TechCategory.valueOf(request.getCategory()));
-        techStack.setProficiency(Proficiency.valueOf(request.getProficiency()));
-        techStack.setYearsOfExp(request.getYearsOfExp());
-        techStack.setCreatedAt(LocalDateTime.now());
-        techStack.setUpdatedAt(LocalDateTime.now());
+        TechStack techStack = TechStack.builder()
+                .profileId(profileId)
+                .name(request.getName())
+                .category(TechCategory.valueOf(request.getCategory()))
+                .proficiency(Proficiency.valueOf(request.getProficiency()))
+                .yearsOfExp(request.getYearsOfExp())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
-        techStack = repository.create(profileId, techStack);
-
-        return TechStackResponse.from(techStack);
+        return TechStackResponse.from(repository.create(profileId, techStack));
     }
 
     // === PUT ===

@@ -1,9 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +8,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TechStack {
     private Long id;                    // 기술 스택 고유 ID
     private Long profileId;             // 프로필 ID (FK)

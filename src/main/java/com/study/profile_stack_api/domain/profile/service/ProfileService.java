@@ -15,6 +15,7 @@ import com.study.profile_stack_api.global.exception.validation.request.Duplicate
 import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.RequiredRequestValueException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ProfileService {
     // ProfileDao 인터페이스로 컨트롤
@@ -35,18 +37,19 @@ public class ProfileService {
         validateCreateProfile(request);
 
         // 2. DTO -> Entity 변환
-        Profile profile = new Profile(
-                null,
-                request.getName().trim(),
-                request.getEmail().trim(),
-                request.getBio() != null ? request.getBio().trim() : null,
-                Position.valueOf(request.getPosition()),
-                request.getCareerYears(),
-                request.getGithubUrl() != null ? request.getGithubUrl().trim() : null,
-                request.getBlogUrl() != null ? request.getBlogUrl().trim() : null,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Profile profile = Profile.builder()
+                .memberId(request.getMemberId())
+                .name(request.getName())
+                .email(request.getEmail())
+                .bio(request.getBio().isEmpty() ? "" : request.getBio())
+                .position(Position.valueOf(request.getPosition()))
+                .careerYears(request.getCareerYears())
+                .githubUrl(request.getGithubUrl().isEmpty() ? "" : request.getGithubUrl())
+                .blogUrl(request.getBlogUrl().isEmpty() ? "" : request.getBlogUrl())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
         // 3. 레포지토리 저장
         Profile newProfile = repository.save(profile);
 
@@ -113,7 +116,7 @@ public class ProfileService {
         }
 
         // 5. Entity 업데이트 (Profile)
-        profile.update(null, request.getName(), request.getEmail(), request.getBio(), position,  request.getCareerYears(), request.getGithubUrl(), request.getBlogUrl());
+        profile.update(request.getName(), request.getEmail(), request.getBio(), position,  request.getCareerYears(), request.getGithubUrl(), request.getBlogUrl());
 
         // 6. 저장 및 응답 반환
         repository.update(profile);
