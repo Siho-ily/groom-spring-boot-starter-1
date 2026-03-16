@@ -2,10 +2,8 @@ package com.study.profile_stack_api.domain.profile.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class ProfileUpdateRequest{
     private String name;
