@@ -6,8 +6,8 @@ PUT http://localhost:8080/api/v1/profiles/1
 Content-Type: application/json
 
 {
-"bio": "프로필 수정 이후 바이오 입니다.",
-"careerYears": 40
+  "bio": "프로필 수정 이후 바이오 입니다.",
+  "careerYears": 40
 }
 
 ### 프로필 수정 후 조회

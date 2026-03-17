@@ -8,6 +8,7 @@ import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class ProfileController {
 
     // POST
     @PostMapping
-    public ResponseEntity<ApiResponse<ProfileResponse>> createProfile(@RequestBody ProfileCreateRequest request) {
+    public ResponseEntity<ApiResponse<ProfileResponse>> createProfile(@Valid @RequestBody ProfileCreateRequest request) {
         ProfileResponse response = profileService.createProfile(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -51,7 +52,7 @@ public class ProfileController {
 
     // PUT
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(@PathVariable Long id,  @RequestBody ProfileUpdateRequest request) {
+    public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(@PathVariable Long id,  @Valid @RequestBody ProfileUpdateRequest request) {
         ProfileResponse response = profileService.updateProfileById(id, request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }

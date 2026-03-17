@@ -270,12 +270,12 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 ### Phase 2: Bean Validation 적용
 
 - [x]  `build.gradle`에 Validation 의존성 추가
-- [ ]  `ProfileCreateRequest`에 검증 어노테이션 추가 (`@NotBlank`, `@Size`, `@Email`, `@NotNull`, `@Min`)
-- [ ]  `ProfileUpdateRequest`에 검증 어노테이션 추가 (`@Size`, `@Min`)
-- [ ]  `TechStackCreateRequest`에 검증 어노테이션 추가
-- [ ]  `TechStackUpdateRequest`에 검증 어노테이션 추가
-- [ ]  모든 Controller의 `@RequestBody` 앞에 `@Valid` 추가
-- [ ]  `GlobalExceptionHandler`에 `MethodArgumentNotValidException` 처리 추가
+- [x]  `ProfileCreateRequest`에 검증 어노테이션 추가 (`@NotBlank`, `@Size`, `@Email`, `@NotNull`, `@Min`)
+- [x]  `ProfileUpdateRequest`에 검증 어노테이션 추가 (`@Size`, `@Min`)
+- [x]  `TechStackCreateRequest`에 검증 어노테이션 추가
+- [x]  `TechStackUpdateRequest`에 검증 어노테이션 추가
+- [x]  모든 Controller의 `@RequestBody` 앞에 `@Valid` 추가
+- [x]  `GlobalExceptionHandler`에 `MethodArgumentNotValidException` 처리 추가
 - [ ]  **Service에서 if문 기반 유효성 검증 코드 모두 제거** (비즈니스 로직만 남기기)
 - [ ]  Postman으로 유효성 검증 실패 케이스 테스트
 

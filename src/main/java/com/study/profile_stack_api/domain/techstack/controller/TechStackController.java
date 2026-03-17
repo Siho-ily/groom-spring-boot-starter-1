@@ -8,6 +8,7 @@ import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +42,14 @@ public class TechStackController {
 
     // POST
     @PostMapping
-    public ResponseEntity<ApiResponse<TechStackResponse>> addTechStack(@PathVariable Long profileId, @RequestBody TechStackCreateRequest request) {
+    public ResponseEntity<ApiResponse<TechStackResponse>> addTechStack(@PathVariable Long profileId, @Valid @RequestBody TechStackCreateRequest request) {
         TechStackResponse response = service.createTechStack(profileId, request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
     // PUT
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<TechStackResponse>> updateTechStack(@PathVariable Long profileId, @PathVariable Long id, @RequestBody TechStackUpdateRequest request) {
+    public ResponseEntity<ApiResponse<TechStackResponse>> updateTechStack(@PathVariable Long profileId, @PathVariable Long id, @Valid @RequestBody TechStackUpdateRequest request) {
         TechStackResponse response = service.updateTechStack(profileId, id, request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
