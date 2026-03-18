@@ -28,6 +28,9 @@ public class TechStackService {
 
     // === GET ===
     public TechStackResponse getTechStackById(Long profileId, Long techStackId) {
+        existsProfileId(profileId);
+        existsTechStackId(techStackId);
+
         TechStack techStack = repository.findById(profileId, techStackId)
                 .orElseThrow(() -> new TechStackNotFoundException(techStackId));
         return TechStackResponse.from(techStack);
@@ -35,12 +38,9 @@ public class TechStackService {
 
     public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, String category, String proficiency) {
         // validation
-        if (category != null && !TechCategory.exists(category)) {
-            throw new InvalidRequestValueException("category", category);
-        }
-        if (proficiency != null && !Proficiency.exists(proficiency)) {
-            throw new InvalidRequestValueException("proficiency", proficiency);
-        }
+        existsProfileId(profileId);
+        existsTechCategory(category);
+        existsProficiency(proficiency);
 
         Page<TechStack> techStackPage = repository.findWithPage(page, limit, profileId, category, proficiency);
         List<TechStackResponse> content = techStackPage.getContent().stream()
@@ -61,6 +61,8 @@ public class TechStackService {
 
     // === POST ===
     public TechStackResponse createTechStack(Long profileId, TechStackCreateRequest request) {
+        existsProfileId(profileId);
+
         TechStack techStack = TechStack.builder()
                 .profileId(profileId)
                 .name(request.getName())
@@ -76,8 +78,13 @@ public class TechStackService {
 
     // === PUT ===
     public TechStackResponse updateTechStack(Long profileId, Long techStackId, TechStackUpdateRequest request) {
+        if(request.hasNoUpdates()) {
+            throw new NoUpdateRequestValueException();
+        }
+
         // validation 체크
-        validationUpdateTechStackRequest(profileId, techStackId, request);
+        existsProfileId(profileId);
+        existsTechStackId(techStackId);
 
         // DTO -> Entity
         TechStack entity = repository.findById(profileId, techStackId)
@@ -116,39 +123,21 @@ public class TechStackService {
         }
     }
 
-    // update request 유효성 검사
-    private void validationUpdateTechStackRequest(Long profileId, Long techStackId, TechStackUpdateRequest request) {
-        if(request.hasNoUpdates()) {
-            throw new NoUpdateRequestValueException();
-        }
-
-        existsProfileId(profileId);
-
-        if(request.getName() != null) {
-            validationName(request.getName());
-        }
-
-        if(request.getYearOfExp() != null) {
-            validationYearsOfExp(request.getYearOfExp());
-        }
-
-        // name                 // 제약조건: 최대 50자
-        // category             // 제약조건:
-        // proficiency          // 제약조건:
-        // yearsOfExp           // 제약조건: 최소 0
-    }
-
-    // validate
-    private void validationName(String name) {
-        if (name.length() < 50) {
-            throw new InvalidRequestValueException("name", name);
+    private void existsTechStackId(Long techStackId) {
+        if (techStackId != null && !repository.existsById(techStackId)) {
+            throw new TechStackNotFoundException(techStackId);
         }
     }
 
+    private void existsProficiency(String proficiency) {
+        if (proficiency != null && !Proficiency.exists(proficiency)) {
+            throw new InvalidRequestValueException("proficiency", proficiency);
+        }
+    }
 
-    private void validationYearsOfExp(Integer yearsOfExp) {
-        if (yearsOfExp < 0) {
-            throw new InvalidRequestValueException("yearsOfExp", yearsOfExp.toString());
+    private void existsTechCategory(String category) {
+        if (category != null && !TechCategory.exists(category)) {
+            throw new InvalidRequestValueException("category", category);
         }
     }
 }

@@ -276,7 +276,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `TechStackUpdateRequest`에 검증 어노테이션 추가
 - [x]  모든 Controller의 `@RequestBody` 앞에 `@Valid` 추가
 - [x]  `GlobalExceptionHandler`에 `MethodArgumentNotValidException` 처리 추가
-- [ ]  **Service에서 if문 기반 유효성 검증 코드 모두 제거** (비즈니스 로직만 남기기)
+- [x]  **Service에서 if문 기반 유효성 검증 코드 모두 제거** (비즈니스 로직만 남기기)
 - [ ]  Postman으로 유효성 검증 실패 케이스 테스트
 
 ### Phase 3: MapStruct 적용
