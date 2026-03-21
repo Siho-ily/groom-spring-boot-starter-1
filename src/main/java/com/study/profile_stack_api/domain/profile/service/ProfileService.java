@@ -6,6 +6,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResp
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.entity.Position;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
+import com.study.profile_stack_api.domain.profile.mapper.ProfileMapper;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
@@ -15,9 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -26,35 +25,26 @@ import java.util.Optional;
 public class ProfileService {
     // ProfileDao 인터페이스로 컨트롤
     private final ProfileDao repository;
+    private final ProfileMapper mapper;
 
     // === Create ===
     public ProfileResponse createProfile(ProfileCreateRequest request) {
         // 1. DTO -> Entity 변환
-        Profile profile = Profile.builder()
-                .memberId(request.getMemberId())
-                .name(request.getName())
-                .email(request.getEmail())
-                .bio(request.getBio().isEmpty() ? "" : request.getBio())
-                .position(Position.valueOf(request.getPosition()))
-                .careerYears(request.getCareerYears())
-                .githubUrl(request.getGithubUrl().isEmpty() ? "" : request.getGithubUrl())
-                .blogUrl(request.getBlogUrl().isEmpty() ? "" : request.getBlogUrl())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        Profile profile = mapper.toEntity(request);
 
         // 2. 레포지토리 저장
         Profile newProfile = repository.save(profile);
 
         // 3. Entity -> DTO 변환 후 리턴
-        return ProfileResponse.from(newProfile);
+        return mapper.toResponse(newProfile);
     }
 
     // === Read ===
     public ProfileResponse getProfileById(Long id) {
         Optional<Profile> result = repository.findById(id);
         Profile profile = result.orElseThrow(() -> new ProfileNotFoundException(id));
-        return ProfileResponse.from(profile);
+
+        return mapper.toResponse(profile);
     }
 
     public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size, String name, Position position) {
@@ -67,9 +57,7 @@ public class ProfileService {
 
         // 조회
         Page<Profile> profilePage = repository.findWithPage(page, size, name, position);
-        List<ProfileResponse> content = profilePage.getContent().stream()
-                .map(ProfileResponse::from)
-                .toList();
+        List<ProfileResponse> content = mapper.toResponseList(profilePage.getContent());
 
         return new Page<>(content,
                     profilePage.getPage(),
@@ -93,18 +81,12 @@ public class ProfileService {
         // 2. 기존 프로필 조회
         Profile profile = repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
 
-        // 3. 포지션 수정 있다면 변경
-        Position position = null;
-        if (request.getPosition() != null) {
-            position = Position.valueOf(request.getPosition());
-        }
+        // 3. Entity 업데이트 (Profile)
+        mapper.updateEntity(request, profile);
 
-        // 4. Entity 업데이트 (Profile)
-        profile.update(request.getName(), request.getEmail(), request.getBio(), position,  request.getCareerYears(), request.getGithubUrl(), request.getBlogUrl());
-
-        // 5. 저장 및 응답 반환
+        // 4. 저장 및 응답 반환
         repository.update(profile);
-        return ProfileResponse.from(profile);
+        return mapper.toResponse(profile);
     }
 
     // === Delete ===

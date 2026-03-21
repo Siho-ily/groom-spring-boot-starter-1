@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.profile.dto.request;
 
+import com.study.profile_stack_api.domain.profile.entity.Position;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,8 @@ public class ProfileCreateRequest {
     @Size(max = 500, message = "자기소개는 500자 이하여야 합니다.")
     private String bio;
 
-    @NotBlank(message = "직무는 필수 입니다.")
-    @Size(max = 20, message = "직무는 20자 이하여야 합니다.")
-    private String position;
+    @NotNull(message = "직무는 필수 입니다.")
+    private Position position;
 
     @NotNull(message = "경력은 필수 입니다.")
     @Min(value = 1, message = "경력은 1년 이상어야 합니다.")
