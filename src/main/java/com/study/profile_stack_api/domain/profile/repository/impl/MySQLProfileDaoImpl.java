@@ -68,7 +68,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         }
     }
 
-    public Page<Profile> findWithPage(Integer page, Integer size, String name, String position) {
+    public Page<Profile> findWithPage(Integer page, Integer size, String name, Position position) {
         boolean paging = page != null && size != null;
 
         StringBuilder sql = new StringBuilder("""
@@ -83,9 +83,9 @@ public class MySQLProfileDaoImpl implements ProfileDao {
             params.add("%" + name + "%");
         }
 
-        if (position != null && !position.isBlank()) {
-            sql.append(" and position like ? ");
-            params.add("%" + position + "%");
+        if (position != null) {
+            sql.append(" and position = ? ");
+            params.add(position.name());
         }
 
         long totalElements = count(name, position);
@@ -170,7 +170,7 @@ public class MySQLProfileDaoImpl implements ProfileDao {
 
     // === Utils ===
     @Override
-    public long count(String name, String position) {
+    public long count(String name, Position position) {
         StringBuilder sql = new StringBuilder("""
         select count(*) from profile
         where 1=1
@@ -183,9 +183,9 @@ public class MySQLProfileDaoImpl implements ProfileDao {
             params.add("%" + name + "%");
         }
 
-        if (position != null && !position.isBlank()) {
-            sql.append(" and position like ? ");
-            params.add("%" + position + "%");
+        if (position != null) {
+            sql.append(" and position = ? ");
+            params.add(position.name());
         }
 
         return jdbcTemplate.queryForObject(

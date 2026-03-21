@@ -71,7 +71,7 @@ class MySQLProfileDaoImplTest {
         dao.save(createProfile(createMember("frontend-b"), "프론트B", "profile-b@example.com", Position.FRONTEND));
         dao.save(createProfile(createMember("backend-c"), "백엔드C", "profile-c@example.com", Position.BACKEND));
 
-        Page<Profile> page = dao.findWithPage(0, 2, "백엔드", "BACKEND");
+        Page<Profile> page = dao.findWithPage(0, 2, "백엔드", Position.BACKEND);
 
         assertThat(page.getContent()).hasSize(2);
         assertThat(page.getTotalElements()).isEqualTo(2);
@@ -130,7 +130,7 @@ class MySQLProfileDaoImplTest {
         dao.save(createProfile(createMember("count-b"), "카운트B", "count-profile-b@example.com", Position.BACKEND));
         dao.save(createProfile(createMember("count-c"), "카운트C", "count-profile-c@example.com", Position.FRONTEND));
 
-        long backendCount = dao.count(null, "BACKEND");
+        long backendCount = dao.count(null, Position.BACKEND);
         long nameFilteredCount = dao.count("카운트", null);
 
         assertThat(backendCount).isEqualTo(2);

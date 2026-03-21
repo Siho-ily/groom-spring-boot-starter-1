@@ -57,7 +57,7 @@ public class ProfileService {
         return ProfileResponse.from(profile);
     }
 
-    public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size, String name, String position) {
+    public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size, String name, Position position) {
         // page, size가 올바른지 확인
         if (page != null && page < 0) {
             throw new InvalidRequestValueException("page", page.toString());

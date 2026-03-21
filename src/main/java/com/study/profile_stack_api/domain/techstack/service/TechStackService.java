@@ -10,7 +10,6 @@ import com.study.profile_stack_api.domain.techstack.entity.TechCategory;
 import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
-import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
 import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
 import com.study.profile_stack_api.global.exception.domain.techstack.TechStackNotFoundException;
@@ -36,11 +35,9 @@ public class TechStackService {
         return TechStackResponse.from(techStack);
     }
 
-    public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, String category, String proficiency) {
+    public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, TechCategory category, Proficiency proficiency) {
         // validation
         existsProfileId(profileId);
-        existsTechCategory(category);
-        existsProficiency(proficiency);
 
         Page<TechStack> techStackPage = repository.findWithPage(page, limit, profileId, category, proficiency);
         List<TechStackResponse> content = techStackPage.getContent().stream()
@@ -126,18 +123,6 @@ public class TechStackService {
     private void existsTechStackId(Long techStackId) {
         if (techStackId != null && !repository.existsById(techStackId)) {
             throw new TechStackNotFoundException(techStackId);
-        }
-    }
-
-    private void existsProficiency(String proficiency) {
-        if (proficiency != null && !Proficiency.exists(proficiency)) {
-            throw new InvalidRequestValueException("proficiency", proficiency);
-        }
-    }
-
-    private void existsTechCategory(String category) {
-        if (category != null && !TechCategory.exists(category)) {
-            throw new InvalidRequestValueException("category", category);
         }
     }
 }
