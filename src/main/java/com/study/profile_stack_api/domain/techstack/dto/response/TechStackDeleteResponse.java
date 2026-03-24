@@ -10,6 +10,6 @@ public class TechStackDeleteResponse {
     private String message;
 
     public static TechStackDeleteResponse from(Long id) {
-        return new TechStackDeleteResponse(id, "프로필이 성공적으로 삭제되었습니다.");
+        return new TechStackDeleteResponse(id, "기술 스택이 성공적으로 삭제되었습니다.");
     }
 }

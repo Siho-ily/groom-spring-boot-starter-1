@@ -136,7 +136,7 @@ public class MySQLTechStackImpl implements TechStackDao {
         String sql = """
                 update tech_stack
                 set name = ?, category = ?, proficiency = ?, years_of_exp = ?
-                where id=?
+                where profile_id = ? and id = ?
                 """;
 
         int updated = jdbcTemplate.update(sql,
@@ -144,6 +144,7 @@ public class MySQLTechStackImpl implements TechStackDao {
                 techStack.getCategory().name(),
                 techStack.getProficiency().name(),
                 techStack.getYearsOfExp(),
+                profileId,
                 techStackId
         );
 
@@ -156,11 +157,11 @@ public class MySQLTechStackImpl implements TechStackDao {
 
     // === Delete ===
     @Override
-    public boolean delete(Long techStackId) {
-        if (!existsById(techStackId)) throw new TechStackNotFoundException(techStackId);
+    public boolean delete(Long profileId, Long techStackId) {
+        if (!existsById(profileId, techStackId)) throw new TechStackNotFoundException(techStackId);
 
-        String sql = "delete from tech_stack where id=?";
-        int updated = jdbcTemplate.update(sql, techStackId);
+        String sql = "delete from tech_stack where profile_id = ? and id = ?";
+        int updated = jdbcTemplate.update(sql, profileId, techStackId);
 
         if(updated == 0){
             throw new TechStackNotFoundException(techStackId);
@@ -199,8 +200,15 @@ public class MySQLTechStackImpl implements TechStackDao {
 
     @Override
     public boolean existsById(Long id) {
-        String sql = "select count(*) from profile where id = ?";
+        String sql = "select count(*) from tech_stack where id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public boolean existsById(Long profileId, Long techStackId) {
+        String sql = "select count(*) from tech_stack where profile_id = ? and id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, profileId, techStackId);
         return count != null && count > 0;
     }
 

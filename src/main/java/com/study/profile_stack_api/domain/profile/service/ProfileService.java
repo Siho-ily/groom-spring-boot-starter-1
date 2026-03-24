@@ -51,7 +51,7 @@ public class ProfileService {
         // page, size가 올바른지 확인
         if (page != null && page < 0) {
             throw new InvalidRequestValueException("page", page.toString());
-        } else if (size != null && size < 0) {
+        } else if (size != null && size <= 0) {
             throw new InvalidRequestValueException("size", size.toString());
         }
 

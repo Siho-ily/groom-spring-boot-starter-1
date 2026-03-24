@@ -41,7 +41,7 @@ public class TechStackController {
     public ResponseEntity<ApiResponse<Page<TechStackResponse>>> getTechStacksWithPage(
             @PathVariable @Positive(message = "profileId는 양수여야 합니다.") Long profileId,
             @RequestParam(defaultValue = "0") @PositiveOrZero(message = "page는 0 이상이어야 합니다.") Integer page,
-            @RequestParam(defaultValue = "0") @PositiveOrZero(message = "size는 0 이상이어야 합니다.") Integer size,
+            @RequestParam(defaultValue = "10") @Positive(message = "size는 1 이상이어야 합니다.") Integer size,
             @RequestParam(required = false) TechCategory category,
             @RequestParam(required = false) Proficiency proficiency
     ) {
@@ -76,7 +76,7 @@ public class TechStackController {
             @PathVariable @Positive(message = "profileId는 양수여야 합니다.") Long profileId,
             @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id
     ) {
-        TechStackDeleteResponse response = service.deleteTechStack(id);
+        TechStackDeleteResponse response = service.deleteTechStack(profileId, id);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 }

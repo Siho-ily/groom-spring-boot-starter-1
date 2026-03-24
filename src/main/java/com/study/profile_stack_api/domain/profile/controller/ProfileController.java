@@ -39,7 +39,7 @@ public class ProfileController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfilesWithPaging(
             @RequestParam(defaultValue = "0") @PositiveOrZero(message = "page는 양수여야 합니다.") Integer page,
-            @RequestParam(defaultValue = "0") @PositiveOrZero(message = "size는 양수여야 합니다.") Integer size,
+            @RequestParam(defaultValue = "10") @Positive(message = "size는 1 이상이어야 합니다.") Integer size,
             @RequestParam(required = false) @NotBlankIfPresent(message = "name는 빈 문자열을 가질 수 없습니다.") String name,
             @RequestParam(required = false) Position position
     ) {

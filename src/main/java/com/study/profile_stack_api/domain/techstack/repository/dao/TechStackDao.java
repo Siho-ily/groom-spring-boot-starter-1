@@ -20,9 +20,10 @@ public interface TechStackDao {
     TechStack update(Long profileId, Long techStackId, TechStack techStack);
 
     // === Delete ===
-    boolean delete(Long techStackId);
+    boolean delete(Long profileId, Long techStackId);
 
     // === Utils ===
     long count(Long profileId, TechCategory category, Proficiency proficiency);                                             // 전체 데이터의 갯수 확인
-    boolean existsById(Long techStackId);                                // profileId의 프로파일에 techStackId에 해당하는 데이터가 존재하는지 확인
+    boolean existsById(Long techStackId);
+    boolean existsById(Long profileId, Long techStackId);                                // profileId의 프로파일에 techStackId에 해당하는 데이터가 존재하는지 확인
 }

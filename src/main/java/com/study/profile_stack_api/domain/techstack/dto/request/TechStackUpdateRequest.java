@@ -25,12 +25,12 @@ public class TechStackUpdateRequest {
 
     @Min(value = 1, message = "사용 경험은 1년 이상, 100년 이하여야 합니다.")
     @Max(value = 100, message = "사용 경험은 1년 이상, 100년 이하여야 합니다.")
-    private Integer yearOfExp;      // 사용 경험(년, 0이상);
+    private Integer yearsOfExp;      // 사용 경험(년, 0이상);
 
     public boolean hasNoUpdates() {
         return name == null
                 && category == null
                 && proficiency == null
-                && yearOfExp == null;
+                && yearsOfExp == null;
     }
 }
