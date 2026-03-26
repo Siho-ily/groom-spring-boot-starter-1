@@ -277,7 +277,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  모든 Controller의 `@RequestBody` 앞에 `@Valid` 추가
 - [x]  `GlobalExceptionHandler`에 `MethodArgumentNotValidException` 처리 추가
 - [x]  **Service에서 if문 기반 유효성 검증 코드 모두 제거** (비즈니스 로직만 남기기)
-- [ ]  Postman으로 유효성 검증 실패 케이스 테스트
+- [x]  Postman으로 유효성 검증 실패 케이스 테스트
 
 ### Phase 3: MapStruct 적용
 
@@ -293,9 +293,9 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 
 - [x]  `build.gradle`에 Spring Security, JJWT 의존성 추가
 - [x]  `application.yml`에 JWT 설정 추가 (`secret`, `access-token-expiration`, `refresh-token-expiration`)
-- [ ]  `Member` Entity 작성 (Lombok 적용)
-- [ ]  `Role` Enum 작성 (`USER`, `ADMIN`)
-- [ ]  `RefreshToken` Entity 작성
+- [x]  `Member` Entity 작성 (Lombok 적용)
+- [x]  `Role` Enum 작성 (`USER`, `ADMIN`)
+- [x]  `RefreshToken` Entity 작성
 - [ ]  `MemberDao` 인터페이스 및 구현체 작성
 - [ ]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
 - [ ]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
