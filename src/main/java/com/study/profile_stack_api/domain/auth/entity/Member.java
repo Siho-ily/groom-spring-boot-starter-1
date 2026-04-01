@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Member {
     private Long id;                    // id
-    private String userId;              // 유저 id
+    private String name;                // 유저 이름
     private String password;            // Bcrypt로 인코딩된 패스워드
-    private String role;                // 권한
+    private Role role;                  // 권한
     private LocalDateTime createAt;     // 생성일
 }

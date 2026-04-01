@@ -15,6 +15,6 @@ public class RefreshToken {
     private Long id;                    // id
     private Long memberId;              // memberId
     private String token;               // 토큰
-    private LocalDateTime expiredAt;    // 만료일
+    private LocalDateTime expiredDate;    // 만료일
     private LocalDateTime createdAt;    // 생성일
 }
