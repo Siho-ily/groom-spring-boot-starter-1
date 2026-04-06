@@ -53,14 +53,17 @@ public class SecurityConfig {
 
                 // ③ 요청별 인가 규칙
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**").permitAll();   // 회원가입, 로그인은 누구나 접근 가능
+                    auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll();
+                    auth.requestMatchers("/v1/api-docs", "/v1/api-docs/**").permitAll();
+                    auth.requestMatchers("/error").permitAll();
+                    auth.requestMatchers("/api/auth/**").permitAll();       // 회원가입, 로그인은 누구나 접근 가능
 
                     if (isDevProfile) {
                         // 운영/테스트 환경에서는 H2 콘솔을 별도로 공개하지 않는다.
                         auth.requestMatchers("/h2-console/**").permitAll();
                     }
 
-                    auth.anyRequest().authenticated();                  // 나머지는 인증 필요
+                    auth.anyRequest().authenticated();                          // 나머지는 인증 필요
                 })
 
                 // ④ 인증 실패 시 커스텀 EntryPoint 사용
