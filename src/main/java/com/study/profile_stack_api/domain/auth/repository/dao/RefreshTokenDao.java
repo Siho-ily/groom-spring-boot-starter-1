@@ -8,10 +8,11 @@ public interface RefreshTokenDao {
     //`save`, `findByMemberId`, `deleteByMemberId`
 
     // Create
-    Optional<RefreshToken> save(String token);
+    Optional<RefreshToken> save(RefreshToken refreshToken);
 
     // Read
     Optional<RefreshToken> findById(Long id);
+    Optional<RefreshToken> findByMemberId(Long memberId);
 
     // Delete
     Boolean deleteByMemberId(Long memberId);
@@ -19,5 +20,4 @@ public interface RefreshTokenDao {
     // Util
     Boolean existById(Long id);
     Boolean existByMemberId(Long memberId);
-    Boolean existByToken(String token);
 }

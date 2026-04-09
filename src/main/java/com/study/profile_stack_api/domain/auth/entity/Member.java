@@ -16,5 +16,5 @@ public class Member {
     private String name;                // 유저 이름
     private String password;            // Bcrypt로 인코딩된 패스워드
     private Role role;                  // 권한
-    private LocalDateTime createAt;     // 생성일
+    private LocalDateTime createdAt;     // 생성일
 }

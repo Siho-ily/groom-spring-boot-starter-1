@@ -11,7 +11,7 @@ public interface MemberDao {
 
     // Read
     Optional<Member> findById(Long id);
-    Optional<Member> findByName(String name);
+//    Optional<Member> findByUsername(String name);
 
     // Update
     Optional<Member> update(Member member);
@@ -21,5 +21,7 @@ public interface MemberDao {
 
     // Util
     Boolean existById(Long id);
-    Boolean existByName(String name);
+//    Boolean existByUsername(String name);
+
+
 }
