@@ -298,7 +298,7 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `RefreshToken` Entity 작성
 - [x]  `MemberDao` 인터페이스 및 구현체 작성
 - [x]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
-- [ ]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
+- [x]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
 - [x]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
 - [x]  `SignupRequest` 작성 (Bean Validation 적용)
 - [ ]  `LoginRequest`, `TokenRefreshRequest` 작성
