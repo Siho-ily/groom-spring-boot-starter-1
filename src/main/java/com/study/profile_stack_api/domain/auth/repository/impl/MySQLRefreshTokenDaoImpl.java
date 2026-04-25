@@ -103,7 +103,7 @@ public class MySQLRefreshTokenDaoImpl implements RefreshTokenDao {
             .id(row.getLong("id"))
             .memberId(row.getLong("member_id"))
             .token(row.getString("token"))
-            .expiredDate(row.getTimestamp("expired_at").toLocalDateTime())
+            .expiredDate(row.getTimestamp("expiry_date").toLocalDateTime())
             .createdAt(row.getTimestamp("created_at").toLocalDateTime())
             .build();
 }

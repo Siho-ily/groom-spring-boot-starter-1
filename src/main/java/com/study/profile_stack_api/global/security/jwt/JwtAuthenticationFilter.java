@@ -72,8 +72,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // H2 콘솔은 개발 프로파일에서만 열어두므로, JWT 필터 예외도 동일한 조건으로 맞춘다.
         boolean isDevProfile = environment.acceptsProfiles(Profiles.of("dev"));
 
-        // 로그인/토큰 발급 관련 경로는 JWT 검사를 생략한다.
-        return path.startsWith("/api/v1/auth/")
+        // 로그인/토큰 발급 관련 경로는 JWT 검사를 생략한다. 로그아웃은 토큰 검증이 필요하므로 제외.
+        return path.equals("/api/v1/auth/signup")
+                || path.equals("/api/v1/auth/login")
+                || path.equals("/api/v1/auth/refresh")
                 || (isDevProfile && ("/h2-console".equals(path) || path.startsWith("/h2-console/")))
                 || (isDevProfile && ("/swagger-ui/index.html".equals(path) || path.startsWith("/swagger-ui/")))
                 || path.startsWith("/v1/api-docs");

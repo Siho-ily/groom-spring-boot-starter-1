@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,25 +28,25 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
+            AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         // 개발 환경에서만 H2 콘솔 관련 예외를 열어준다.
         boolean isDevProfile = environment.acceptsProfiles(Profiles.of("dev"));
 
         if (isDevProfile) {
             // H2 콘솔은 iframe을 사용하므로 same-origin frame 허용이 필요하다.
             http.headers(headers -> headers.frameOptions(
-                    frameOptions -> frameOptions.sameOrigin()
+                    HeadersConfigurer.FrameOptionsConfig::sameOrigin
             ));
         }
 
         http
                 // ① REST API이므로 CSRF 비활성화
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
 
                 // ② JWT 방식이므로 세션을 사용하지 않음 (Stateless)
                 .sessionManagement(session ->
@@ -56,7 +58,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll();
                     auth.requestMatchers("/v1/api-docs", "/v1/api-docs/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
-                    auth.requestMatchers("/api/v1/auth/**").permitAll();    // 회원가입, 로그인은 누구나 접근 가능
+                    auth.requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll();
+                    auth.requestMatchers("/api/v1/auth/logout").authenticated();
 
                     if (isDevProfile) {
                         // 운영/테스트 환경에서는 H2 콘솔을 별도로 공개하지 않는다.

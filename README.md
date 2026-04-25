@@ -315,9 +315,9 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
   - [ ]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
   - [x]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
   - [x]  `JwtAuthenticationEntryPoint` 등록
-- [ ]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
-- [ ]  `AuthController` 구현 (signup, login, refresh, logout 엔드포인트)
-- [ ]  Postman으로 회원가입 → 로그인 → Access Token으로 API 호출 테스트
+- [x]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
+- [x]  `AuthController` 구현 (signup, login, refresh, logout 엔드포인트)
+- [x]  Postman으로 회원가입 → 로그인 → Access Token으로 API 호출 테스트
 
 ### Phase 6: 소유권 검증 적용
 

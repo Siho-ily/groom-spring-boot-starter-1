@@ -2,8 +2,11 @@ package com.study.profile_stack_api.domain.auth.service;
 
 import com.study.profile_stack_api.domain.auth.dto.request.LoginRequest;
 import com.study.profile_stack_api.domain.auth.dto.request.SignupRequest;
+import com.study.profile_stack_api.domain.auth.dto.request.TokenRefreshRequest;
 import com.study.profile_stack_api.domain.auth.dto.response.LoginResponse;
+import com.study.profile_stack_api.domain.auth.dto.response.LogoutResponse;
 import com.study.profile_stack_api.domain.auth.dto.response.SignupResponse;
+import com.study.profile_stack_api.domain.auth.dto.response.TokenRefreshResponse;
 import com.study.profile_stack_api.domain.auth.entity.Member;
 import com.study.profile_stack_api.domain.auth.entity.RefreshToken;
 import com.study.profile_stack_api.domain.auth.mapper.MemberMapper;
@@ -12,10 +15,10 @@ import com.study.profile_stack_api.domain.auth.repository.dao.MemberDao;
 import com.study.profile_stack_api.domain.auth.repository.dao.RefreshTokenDao;
 import com.study.profile_stack_api.global.exception.domain.auth.AuthException;
 import com.study.profile_stack_api.global.exception.domain.auth.DuplicateMemberUsernameException;
+import com.study.profile_stack_api.global.exception.domain.auth.RefreshTokenNotFoundException;
 import com.study.profile_stack_api.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -108,5 +110,55 @@ public class AuthService {
             log.error("Login failed for user: {}", request.getUsername(), e);
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+    /**
+     * User refresh
+     */
+    @Transactional
+    public TokenRefreshResponse refresh(TokenRefreshRequest request) {
+        String token = request.getRefreshToken();
+
+        // 1. 서명·만료 검증
+        jwtTokenProvider.validateToken(token);
+
+        // 2. 리프레시 토큰 타입 확인
+        if (!jwtTokenProvider.isRefreshToken(token)) {
+            throw new BadCredentialsException("Invalid refresh token");
+        }
+
+        // 3. username으로 member 조회
+        String username = jwtTokenProvider.getUsernameFromToken(token);
+        Member member = memberDao.findByUsername(username).orElseThrow(AuthException::new);
+
+        // 4. DB에 저장된 토큰과 일치 여부 확인
+        RefreshToken storedToken = refreshTokenDao.findByMemberId(member.getId())
+                .orElseThrow(RefreshTokenNotFoundException::new);
+        if (!storedToken.getToken().equals(token)) {
+            throw new BadCredentialsException("Refresh token mismatch");
+        }
+
+        // 5. login과 동일한 포맷으로 role 구성 ("ROLE_" 접두사)
+        String role = "ROLE_" + member.getRole().name();
+
+        // 6. 새 Access Token 발급
+        String newAccessToken = jwtTokenProvider.generateAccessToken(username, role);
+
+        log.info("Token refreshed for user: {}", username);
+
+        return refreshTokenMapper.toResponse(newAccessToken);
+    }
+
+    /**
+     * User logout
+     */
+    @Transactional
+    public LogoutResponse logout(String username) {
+        Member member = memberDao.findByUsername(username)
+                .orElseThrow(AuthException::new);
+
+        refreshTokenDao.deleteByMemberId(member.getId());
+
+        return new LogoutResponse();
     }
 }
