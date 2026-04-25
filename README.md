@@ -296,25 +296,25 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `Member` Entity 작성 (Lombok 적용)
 - [x]  `Role` Enum 작성 (`USER`, `ADMIN`)
 - [x]  `RefreshToken` Entity 작성
-- [ ]  `MemberDao` 인터페이스 및 구현체 작성
-- [ ]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
+- [x]  `MemberDao` 인터페이스 및 구현체 작성
+- [x]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
 - [ ]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
-- [ ]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
-- [ ]  `SignupRequest` 작성 (Bean Validation 적용)
+- [x]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
+- [x]  `SignupRequest` 작성 (Bean Validation 적용)
 - [ ]  `LoginRequest`, `TokenRefreshRequest` 작성
 - [ ]  `LoginResponse` (accessToken + refreshToken), `TokenRefreshResponse` (accessToken) 작성
 
 ### Phase 5: Spring Security — JWT 필터 및 설정
 
-- [ ]  `JwtTokenProvider` 구현 (`createAccessToken`, `createRefreshToken`, `getUsername`, `validateToken`)
-- [ ]  `JwtAuthenticationFilter` 구현 (`OncePerRequestFilter` 상속, `shouldNotFilter()` 오버라이드)
-- [ ]  `JwtAuthenticationEntryPoint` 구현 (토큰 에러 분기: `TOKEN_EXPIRED`, `INVALID_TOKEN`, `UNAUTHORIZED`)
+- [x]  `JwtTokenProvider` 구현 (`createAccessToken`, `createRefreshToken`, `getUsername`, `validateToken`)
+- [x]  `JwtAuthenticationFilter` 구현 (`OncePerRequestFilter` 상속, `shouldNotFilter()` 오버라이드)
+- [x]  `JwtAuthenticationEntryPoint` 구현 (토큰 에러 분기: `TOKEN_EXPIRED`, `INVALID_TOKEN`, `UNAUTHORIZED`)
 - [ ]  `SecurityConfig` 작성
-  - [ ]  CSRF 비활성화
-  - [ ]  세션 정책 `STATELESS` 설정
+  - [x]  CSRF 비활성화
+  - [x]  세션 정책 `STATELESS` 설정
   - [ ]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
-  - [ ]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
-  - [ ]  `JwtAuthenticationEntryPoint` 등록
+  - [x]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
+  - [x]  `JwtAuthenticationEntryPoint` 등록
 - [ ]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
 - [ ]  `AuthController` 구현 (signup, login, refresh, logout 엔드포인트)
 - [ ]  Postman으로 회원가입 → 로그인 → Access Token으로 API 호출 테스트

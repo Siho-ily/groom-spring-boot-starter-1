@@ -33,7 +33,7 @@ public class MySQLMemberDaoImpl implements MemberDao {
 
         jdbcTemplate.update((connection) -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"ID"});
-            ps.setString(1, member.getName());
+            ps.setString(1, member.getUsername());
             ps.setString(2, member.getPassword());
             ps.setString(3, member.getRole().name());
             ps.setTimestamp(4, Timestamp.valueOf(member.getCreatedAt()));
@@ -41,18 +41,17 @@ public class MySQLMemberDaoImpl implements MemberDao {
         }, keyHolder);
 
         Number key = keyHolder.getKey();
-        Member new_member = null;
-        if (key != null) {
-            new_member = Member.builder()
-                    .id(key.longValue())
-                    .name(member.getName())
-                    .password(member.getPassword())
-                    .role(member.getRole())
-                    .createdAt(member.getCreatedAt())
-                    .build();
+        if (key == null) {
+            throw new RuntimeException("save() 후 생성된 키를 가져오지 못했습니다.");
         }
 
-        return new_member;
+        return Member.builder()
+                .id(key.longValue())
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .role(member.getRole())
+                .createdAt(member.getCreatedAt())
+                .build();
     }
 
     @Override
@@ -70,12 +69,12 @@ public class MySQLMemberDaoImpl implements MemberDao {
     public Optional<Member> update(Member member) {
         String sql = """
                 update member
-                set name = ?, password = ?, role = ?
+                set username = ?, password = ?, role = ?
                 where id = ?
                 """;
 
         int updated = jdbcTemplate.update(sql,
-                member.getName(),
+                member.getUsername(),
                 member.getPassword(),
                 member.getRole().name(),
                 member.getId());
@@ -103,10 +102,12 @@ public class MySQLMemberDaoImpl implements MemberDao {
         return count != null && count > 0;
     }
 
-//    @Override
-//    public Boolean existByUsername(String username) {
-//        return null;
-//    }
+    @Override
+    public Boolean existByUsername(String username) {
+        String sql = "select count(*) from member where username = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
+        return count != null && count > 0;
+    }
 //
 //    @Override
 //    public Optional<Member> findByUsername(String name) {
@@ -117,7 +118,7 @@ public class MySQLMemberDaoImpl implements MemberDao {
     // === RowMapper ===
     private final RowMapper<Member> rowMapper = (row, index) -> Member.builder()
             .id(row.getLong("id"))
-            .name(row.getString("name"))
+            .username(row.getString("username"))
             .password(row.getString("password"))
             .role(Role.valueOf(row.getString("role")))
             .createdAt(row.getTimestamp("created_at").toLocalDateTime())

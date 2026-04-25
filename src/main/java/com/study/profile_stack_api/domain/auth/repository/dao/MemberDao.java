@@ -21,7 +21,7 @@ public interface MemberDao {
 
     // Util
     Boolean existById(Long id);
-//    Boolean existByUsername(String name);
+    Boolean existByUsername(String name);
 
 
 }
