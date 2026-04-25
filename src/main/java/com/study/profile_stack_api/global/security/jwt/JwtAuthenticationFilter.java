@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean isDevProfile = environment.acceptsProfiles(Profiles.of("dev"));
 
         // 로그인/토큰 발급 관련 경로는 JWT 검사를 생략한다.
-        return path.startsWith("/api/auth/")
+        return path.startsWith("/api/v1/auth/")
                 || (isDevProfile && ("/h2-console".equals(path) || path.startsWith("/h2-console/")))
                 || (isDevProfile && ("/swagger-ui/index.html".equals(path) || path.startsWith("/swagger-ui/")))
                 || path.startsWith("/v1/api-docs");

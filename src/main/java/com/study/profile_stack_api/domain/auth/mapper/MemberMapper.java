@@ -17,7 +17,7 @@ public interface MemberMapper {
             @Mapping(target = "username", source = "request.username"),
             @Mapping(target = "password", source = "encodedPassword"),
             @Mapping(target = "role", expression = "java(Role.USER)"),
-            @Mapping(target = "createdAt", ignore = true)
+            @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
     })
     Member toMemberEntity(SignupRequest request, String encodedPassword);
 

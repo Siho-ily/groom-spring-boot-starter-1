@@ -301,8 +301,8 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
 - [x]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
 - [x]  `SignupRequest` 작성 (Bean Validation 적용)
-- [ ]  `LoginRequest`, `TokenRefreshRequest` 작성
-- [ ]  `LoginResponse` (accessToken + refreshToken), `TokenRefreshResponse` (accessToken) 작성
+- [x]  `LoginRequest`, `TokenRefreshRequest` 작성
+- [x]  `LoginResponse` (accessToken + refreshToken), `TokenRefreshResponse` (accessToken) 작성
 
 ### Phase 5: Spring Security — JWT 필터 및 설정
 

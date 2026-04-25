@@ -56,7 +56,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll();
                     auth.requestMatchers("/v1/api-docs", "/v1/api-docs/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
-                    auth.requestMatchers("/api/auth/**").permitAll();       // 회원가입, 로그인은 누구나 접근 가능
+                    auth.requestMatchers("/api/v1/auth/**").permitAll();    // 회원가입, 로그인은 누구나 접근 가능
 
                     if (isDevProfile) {
                         // 운영/테스트 환경에서는 H2 콘솔을 별도로 공개하지 않는다.

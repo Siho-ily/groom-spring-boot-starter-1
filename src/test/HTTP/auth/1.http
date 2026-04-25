@@ -14,7 +14,7 @@ POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
 
 {
-    "username": "javakim",
+    "username": "testuser",
     "password": "password123"
   }
 
@@ -23,7 +23,7 @@ POST http://localhost:8080/api/v1/auth/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "{여기에_refreshToken_값_붙여넣기}"
+    "refreshToken": "{eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzc3MTA2NjEwLCJleHAiOjE3Nzc3MTE0MTB9.RZlqmKlKdTGR3H_ZLCy5-A8HIrICtYagnp4USoC4hoxPHEHRP0Tehv6NgEmHWhaB}"
 }
 
 ### 로그아웃
