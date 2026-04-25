@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -87,14 +89,15 @@ public class JwtTokenProvider {
     public String generateRefreshToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
-
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .subject(username)
                 .claim("type", "refresh")
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secretKey)
                 .compact();
+
+        return token;
     }
 
     /**
@@ -141,8 +144,20 @@ public class JwtTokenProvider {
     /**
      * 유효한 토큰의 만료 시각을 반환한다.
      */
-    public Date getExpirationFromToken(String token) {
-        return getClaims(token).getExpiration();
+    public LocalDateTime getExpirationFromToken(String token) {
+        return getClaims(token).getExpiration().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    /**
+     *
+     * 유효한 토큰의 생성 시각을 반환한다.
+     */
+    public LocalDateTime getCreatedAtFromToken(String token) {
+        return getClaims(token).getIssuedAt().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     public record TokenClaims(String username, String roles) {}

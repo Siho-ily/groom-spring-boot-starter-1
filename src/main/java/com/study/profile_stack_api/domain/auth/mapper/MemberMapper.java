@@ -1,6 +1,7 @@
 package com.study.profile_stack_api.domain.auth.mapper;
 
 import com.study.profile_stack_api.domain.auth.dto.request.SignupRequest;
+import com.study.profile_stack_api.domain.auth.dto.response.LoginResponse;
 import com.study.profile_stack_api.domain.auth.dto.response.SignupResponse;
 import com.study.profile_stack_api.domain.auth.entity.Member;
 import com.study.profile_stack_api.domain.auth.entity.Role;
@@ -18,11 +19,19 @@ public interface MemberMapper {
             @Mapping(target = "role", expression = "java(Role.USER)"),
             @Mapping(target = "createdAt", ignore = true)
     })
-    Member toEntity(SignupRequest request, String encodedPassword);
+    Member toMemberEntity(SignupRequest request, String encodedPassword);
 
     @Mappings({
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "username", source = "username")
     })
-    SignupResponse toResponse(Member member);
+    SignupResponse toSignupResponse(Member member);
+
+
+    // 로그인
+    @Mappings({
+            @Mapping(target="accessToken", source = "accessToken"),
+            @Mapping(target="refreshToken", source = "refreshToken")
+    })
+    LoginResponse toLoginResponse(String accessToken, String refreshToken);
 }
