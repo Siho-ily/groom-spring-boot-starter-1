@@ -27,8 +27,8 @@ logging:
 
 jwt:
   secret: "YourBase64EncodedSecretKeyHereMustBeAtLeast256BitsLong!!"
-  access-token-expiration: 1800000    # 30분 (밀리초)
-  refresh-token-expiration: 604800000 # 7일 (밀리초)
+  access-token-expiration: 1800    # 30분 (초)
+  refresh-token-expiration: 604800 # 7일 (초)
 
 # 문서환
 springdoc:

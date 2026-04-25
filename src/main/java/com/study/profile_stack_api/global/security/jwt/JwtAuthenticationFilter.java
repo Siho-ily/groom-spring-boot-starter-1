@@ -96,38 +96,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * JWT가 유효하면 사용자 정보와 권한을 꺼내 인증 객체를 만든다.
      */
     private void authenticateUser(String token, HttpServletRequest request) {
-        // 토큰 자체의 유효성을 먼저 확인한다.
-        if (jwtTokenProvider.validateToken(token)) {
-            // 토큰의 subject 또는 저장된 사용자 식별자를 꺼낸다.
-            String username = jwtTokenProvider.getUsernameFromToken(token);
+        // 토큰을 한 번만 파싱해 username과 roles를 함께 추출한다.
+        JwtTokenProvider.TokenClaims claims = jwtTokenProvider.parseAccessToken(token);
+        String username = claims.username();
 
-            // 토큰에 담긴 권한 문자열을 Security 권한 목록으로 변환한다.
-            String rolesString = jwtTokenProvider.getRolesFromToken(token);
-            List<SimpleGrantedAuthority> authorities = parseAuthorities(rolesString);
+        // 토큰에 담긴 권한 문자열을 Security 권한 목록으로 변환한다.
+        List<SimpleGrantedAuthority> authorities = parseAuthorities(claims.roles());
 
-            // DB 조회 없이, 토큰 안의 정보만으로 UserDetails를 구성한다.
-            UserDetails userDetails = User.builder()
-                    .username(username)
-                    .password("") // JWT 인증에서는 비밀번호 검증을 다시 하지 않는다.
-                    .authorities(authorities)
-                    .build();
+        // DB 조회 없이, 토큰 안의 정보만으로 UserDetails를 구성한다.
+        UserDetails userDetails = User.builder()
+                .username(username)
+                .password("") // JWT 인증에서는 비밀번호 검증을 다시 하지 않는다.
+                .authorities(authorities)
+                .build();
 
-            // Spring Security가 사용할 인증 객체를 생성한다.
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+        // Spring Security가 사용할 인증 객체를 생성한다.
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-            // 요청 IP, 세션 정보 같은 부가 정보를 인증 객체에 담는다.
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        // 요청 IP, 세션 정보 같은 부가 정보를 인증 객체에 담는다.
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            // 이후 인가 처리에서 사용할 수 있도록 SecurityContext에 저장한다.
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 이후 인가 처리에서 사용할 수 있도록 SecurityContext에 저장한다.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.debug("Authenticated user: {}", username);
-        }
+        log.debug("Authenticated user: {}", username);
     }
 
     /**

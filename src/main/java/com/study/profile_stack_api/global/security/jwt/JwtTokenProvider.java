@@ -40,7 +40,6 @@ public class JwtTokenProvider {
 
         // 설정 파일의 문자열 시크릿을 HMAC 서명 키로 변환한다.
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        // 설정값은 초 단위라고 가정하고 내부에서는 ms 단위로 통일한다.
         this.accessTokenValidityInMilliseconds = accessTokenValidity * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidity * 1000;
     }
@@ -113,6 +112,17 @@ public class JwtTokenProvider {
     }
 
     /**
+     * 토큰을 한 번만 파싱해 username과 roles를 묶어 반환한다.
+     */
+    public TokenClaims parseAccessToken(String token) {
+        Claims claims = getClaims(token);
+        return new TokenClaims(
+                claims.getSubject(),
+                claims.get("roles", String.class)
+        );
+    }
+
+    /**
      * 토큰이 서명, 형식, 만료 시간 기준으로 유효한지 검증한다.
      */
     public boolean validateToken(String token) {
@@ -134,6 +144,8 @@ public class JwtTokenProvider {
     public Date getExpirationFromToken(String token) {
         return getClaims(token).getExpiration();
     }
+
+    public record TokenClaims(String username, String roles) {}
 
     /**
      * JWT 파싱과 서명 검증을 수행하고, 성공하면 payload(claims)를 반환한다.

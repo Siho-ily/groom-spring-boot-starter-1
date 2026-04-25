@@ -11,7 +11,7 @@ public interface MemberDao {
 
     // Read
     Optional<Member> findById(Long id);
-//    Optional<Member> findByUsername(String name);
+    Optional<Member> findByUsername(String name);
 
     // Update
     Optional<Member> update(Member member);

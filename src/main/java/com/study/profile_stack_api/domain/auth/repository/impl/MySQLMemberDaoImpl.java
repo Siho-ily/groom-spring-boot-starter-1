@@ -65,6 +65,18 @@ public class MySQLMemberDaoImpl implements MemberDao {
         }
     }
 
+
+    @Override
+    public Optional<Member> findByUsername(String username) {
+        String sql = "SELECT * FROM member WHERE username = ?";
+        try {
+            Member member = jdbcTemplate.queryForObject(sql, rowMapper, username);
+            return Optional.ofNullable(member);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public Optional<Member> update(Member member) {
         String sql = """
@@ -108,11 +120,6 @@ public class MySQLMemberDaoImpl implements MemberDao {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
         return count != null && count > 0;
     }
-//
-//    @Override
-//    public Optional<Member> findByUsername(String name) {
-//        return Optional.empty();
-//    }
 
 
     // === RowMapper ===
