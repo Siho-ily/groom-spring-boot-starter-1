@@ -49,32 +49,36 @@ public class JwtTokenProvider {
     /**
      * 인증 객체에서 사용자명과 권한을 꺼내 액세스 토큰을 만든다.
      */
-    public String generateAccessToken(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-        String username;
-
-        if (principal instanceof UserDetails userDetails) {
-            username = userDetails.getUsername();
-        } else {
-            username = authentication.getName();
-        }
-
-        String roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        return generateAccessToken(username, roles);
-    }
+//    public String generateAccessToken(Authentication authentication) {
+//        Object principal = authentication.getPrincipal();
+//        String username;
+//        Long memberId;
+//
+//        if (principal instanceof UserDetails userDetails) {
+//            username = userDetails.getUsername();
+//            memberId = userDetails.getMemberId();
+//        } else {
+//            username = authentication.getName();
+//            memberId = authentication.getMemberId();
+//        }
+//
+//        String roles = authentication.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.joining(","));
+//
+//        return generateAccessToken(memberId, username, roles);
+//    }
 
     /**
      * 사용자명과 권한 문자열로 액세스 토큰을 만든다.
      */
-    public String generateAccessToken(String username, String roles) {
+    public String generateAccessToken(Long memberId, String username, String roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .subject(username)
+                .claim("memberId", memberId)
                 .claim("roles", roles)
                 .claim("type", "access")
                 .issuedAt(now)
@@ -120,6 +124,7 @@ public class JwtTokenProvider {
     public TokenClaims parseAccessToken(String token) {
         Claims claims = getClaims(token);
         return new TokenClaims(
+                claims.get("memberId", Long.class),
                 claims.getSubject(),
                 claims.get("roles", String.class)
         );
@@ -160,7 +165,7 @@ public class JwtTokenProvider {
                 .toLocalDateTime();
     }
 
-    public record TokenClaims(String username, String roles) {}
+    public record TokenClaims(Long memberId, String username, String roles) {}
 
     /**
      * JWT 파싱과 서명 검증을 수행하고, 성공하면 payload(claims)를 반환한다.

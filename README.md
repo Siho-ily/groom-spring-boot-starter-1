@@ -324,11 +324,11 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `profile` 테이블에 `member_id` 컬럼 추가 (schema.sql 수정)
 - [x]  `Profile` Entity에 `memberId` 필드 추가
 - [x]  `ProfileDao`에 `member_id` 관련 쿼리 추가 (`findByMemberId`, INSERT 시 `member_id` 포함)
-- [ ]  `ProfileService`에 소유권 검증 로직 추가 (수정/삭제 시 `memberId` 확인)
+- [x]  `ProfileService`에 소유권 검증 로직 추가 (수정/삭제 시 `memberId` 확인)
 - [ ]  `TechStackService`에 소유권 검증 로직 추가 (해당 프로필의 소유자인지 확인)
 - [ ]  `ProfileController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
 - [ ]  `TechStackController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
-- [ ]  `UnauthorizedException` 작성 + `GlobalExceptionHandler`에 처리 추가
+- [x]  `UnauthorizedException` 작성 + `GlobalExceptionHandler`에 처리 추가
 - [ ]  Postman으로 소유권 검증 테스트 (A 사용자로 B의 프로필 수정 시도 → 거부 확인)
 
 ## 아키텍처

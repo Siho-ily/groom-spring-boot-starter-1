@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.global.security.jwt;
 
+import com.study.profile_stack_api.domain.auth.service.CustomUserDetails;
 import com.study.profile_stack_api.global.exception.domain.auth.ExpiredTokenException;
 import com.study.profile_stack_api.global.exception.domain.auth.InvalidTokenException;
 import jakarta.servlet.FilterChain;
@@ -14,8 +15,6 @@ import org.springframework.core.env.Profiles;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -106,11 +105,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         List<SimpleGrantedAuthority> authorities = parseAuthorities(claims.roles());
 
         // DB 조회 없이, 토큰 안의 정보만으로 UserDetails를 구성한다.
-        UserDetails userDetails = User.builder()
-                .username(username)
-                .password("") // JWT 인증에서는 비밀번호 검증을 다시 하지 않는다.
-                .authorities(authorities)
-                .build();
+        CustomUserDetails userDetails = new CustomUserDetails(
+                claims.memberId(),
+                username,
+                authorities
+        );
 
         // Spring Security가 사용할 인증 객체를 생성한다.
         UsernamePasswordAuthenticationToken authentication =

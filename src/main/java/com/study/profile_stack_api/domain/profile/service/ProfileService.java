@@ -9,12 +9,14 @@ import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.domain.profile.mapper.ProfileMapper;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.domain.auth.ForbiddenOwnerMismatch;
 import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
 import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,7 @@ public class ProfileService {
     private final ProfileMapper mapper;
 
     // === Create ===
+    @Transactional
     public ProfileResponse createProfile(ProfileCreateRequest request) {
         // 1. DTO -> Entity 변환
         Profile profile = mapper.toEntity(request);
@@ -40,6 +43,7 @@ public class ProfileService {
     }
 
     // === Read ===
+    @Transactional(readOnly = true)
     public ProfileResponse getProfileById(Long id) {
         Optional<Profile> result = repository.findById(id);
         Profile profile = result.orElseThrow(() -> new ProfileNotFoundException(id));
@@ -47,6 +51,7 @@ public class ProfileService {
         return mapper.toResponse(profile);
     }
 
+    @Transactional(readOnly = true)
     public Page<ProfileResponse> getProfileWithPaging(Integer page, Integer size, String name, Position position) {
         // page, size가 올바른지 확인
         if (page != null && page < 0) {
@@ -72,7 +77,12 @@ public class ProfileService {
     }
 
     // === Update ===
-    public ProfileResponse updateProfileById(Long id, ProfileUpdateRequest request) {
+    @Transactional
+    public ProfileResponse updateProfileById(
+            Long id,
+            Long memberId,
+            ProfileUpdateRequest request
+    ) {
         // 1. 수정할 사항이 있는지 확인
         if (request.hasNoUpdates()) {
             throw new NoUpdateRequestValueException();
@@ -80,6 +90,11 @@ public class ProfileService {
 
         // 2. 기존 프로필 조회
         Profile profile = repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
+
+        // 소유권 검증
+        if (!profile.getMemberId().equals(memberId)) {
+            throw new ForbiddenOwnerMismatch();
+        }
 
         // 3. Entity 업데이트 (Profile)
         mapper.updateEntity(request, profile);
@@ -90,9 +105,15 @@ public class ProfileService {
     }
 
     // === Delete ===
-    public ProfileDeleteResponse deleteProfileById(Long id) {
+    @Transactional
+    public ProfileDeleteResponse deleteProfileById(Long id,  Long memberId) {
         // 1. 프로필 존재 확인
-        repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
+        Profile profile = repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
+
+        // 소유권 검증
+        if (!profile.getMemberId().equals(memberId)) {
+            throw new ForbiddenOwnerMismatch();
+        }
 
         // 2. 삭제 수행
         repository.deleteById(id);

@@ -93,7 +93,7 @@ public class AuthService {
                     .collect(Collectors.joining(","));
 
             // 4. Access Token + Refresh Token 생성
-            String accessToken = jwtTokenProvider.generateAccessToken(member.getUsername(), roles);
+            String accessToken = jwtTokenProvider.generateAccessToken(member.getId(), member.getUsername(), roles);
             String refreshToken = jwtTokenProvider.generateRefreshToken(member.getUsername());
 
             // 5. Refresh Token을 DB에 저장
@@ -142,7 +142,7 @@ public class AuthService {
         String role = "ROLE_" + member.getRole().name();
 
         // 6. 새 Access Token 발급
-        String newAccessToken = jwtTokenProvider.generateAccessToken(username, role);
+        String newAccessToken = jwtTokenProvider.generateAccessToken(member.getId(), username, role);
 
         log.info("Token refreshed for user: {}", username);
 
