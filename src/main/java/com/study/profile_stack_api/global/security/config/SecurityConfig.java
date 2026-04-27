@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -55,16 +56,38 @@ public class SecurityConfig {
 
                 // ③ 요청별 인가 규칙
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll();
-                    auth.requestMatchers("/v1/api-docs", "/v1/api-docs/**").permitAll();
-                    auth.requestMatchers("/error").permitAll();
-                    auth.requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll();
-                    auth.requestMatchers("/api/v1/auth/logout").authenticated();
+                    // *** permitAll ***
+                    // swagger나 문서 접근 허용
+                    auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v1/api-docs/**").permitAll();
 
+                    // 회원가입, 로그인, 토큰 재발급은 로그인 전에도 허용
+                    auth.requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll();
+
+                    // 프로피일 조회는 허용
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/profiles", "/api/v1/profiles/*").permitAll();
+
+                    // 태크스택 조회는 허용
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/profiles/*/tech-stacks", "/api/v1/profiles/*/tech-stacks/*").permitAll();
+
+                    // 운영/테스트 환경에서는 H2 콘솔을 별도로 공개하지 않음
                     if (isDevProfile) {
-                        // 운영/테스트 환경에서는 H2 콘솔을 별도로 공개하지 않는다.
                         auth.requestMatchers("/h2-console/**").permitAll();
                     }
+
+
+                    // *** authenticated ***
+                    // 로그아웃은 로그인한 사용자만 허용
+                    auth.requestMatchers("/api/v1/auth/logout").authenticated();
+
+                    // 프로파일 생성, 수정, 삭제는 로그인한 사용자만 허용
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/profiles").authenticated();
+                    auth.requestMatchers(HttpMethod.PUT, "/api/v1/profiles/*").authenticated();
+                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/profiles/*").authenticated();
+
+                    // 태크스택 생성, 수정, 삭제는 로그인한 사용자만 허용
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/profiles/*/tech-stacks").authenticated();
+                    auth.requestMatchers(HttpMethod.PUT, "/api/v1/profiles/*/tech-stacks/*").authenticated();
+                    auth.requestMatchers(HttpMethod.DELETE, "/api/v1/profiles/*/tech-stacks/*").authenticated();
 
                     auth.anyRequest().authenticated();                          // 나머지는 인증 필요
                 })

@@ -309,10 +309,10 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `JwtTokenProvider` 구현 (`createAccessToken`, `createRefreshToken`, `getUsername`, `validateToken`)
 - [x]  `JwtAuthenticationFilter` 구현 (`OncePerRequestFilter` 상속, `shouldNotFilter()` 오버라이드)
 - [x]  `JwtAuthenticationEntryPoint` 구현 (토큰 에러 분기: `TOKEN_EXPIRED`, `INVALID_TOKEN`, `UNAUTHORIZED`)
-- [ ]  `SecurityConfig` 작성
+- [x]  `SecurityConfig` 작성
   - [x]  CSRF 비활성화
   - [x]  세션 정책 `STATELESS` 설정
-  - [ ]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
+  - [x]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
   - [x]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
   - [x]  `JwtAuthenticationEntryPoint` 등록
 - [x]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
