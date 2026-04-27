@@ -68,6 +68,17 @@ public class MySQLProfileDaoImpl implements ProfileDao {
         }
     }
 
+    @Override
+    public Optional<Profile> findByMemberId(Long memberId) {
+        String sql = "SELECT * FROM profile WHERE member_id = ?";
+        try {
+            Profile profile = jdbcTemplate.queryForObject(sql, profileRowMapper, memberId);
+            return Optional.ofNullable(profile);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
     public Page<Profile> findWithPage(Integer page, Integer size, String name, Position position) {
         boolean paging = page != null && size != null;
 

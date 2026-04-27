@@ -321,9 +321,9 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 
 ### Phase 6: 소유권 검증 적용
 
-- [ ]  `profile` 테이블에 `member_id` 컬럼 추가 (schema.sql 수정)
-- [ ]  `Profile` Entity에 `memberId` 필드 추가
-- [ ]  `ProfileDao`에 `member_id` 관련 쿼리 추가 (`findByMemberId`, INSERT 시 `member_id` 포함)
+- [x]  `profile` 테이블에 `member_id` 컬럼 추가 (schema.sql 수정)
+- [x]  `Profile` Entity에 `memberId` 필드 추가
+- [x]  `ProfileDao`에 `member_id` 관련 쿼리 추가 (`findByMemberId`, INSERT 시 `member_id` 포함)
 - [ ]  `ProfileService`에 소유권 검증 로직 추가 (수정/삭제 시 `memberId` 확인)
 - [ ]  `TechStackService`에 소유권 검증 로직 추가 (해당 프로필의 소유자인지 확인)
 - [ ]  `ProfileController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
