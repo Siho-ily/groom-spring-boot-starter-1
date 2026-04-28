@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.controller;
 
+import com.study.profile_stack_api.domain.auth.service.CustomUserDetails;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +55,10 @@ public class TechStackController {
     @PostMapping
     public ResponseEntity<ApiResponse<TechStackResponse>> addTechStack(
             @PathVariable @Positive(message = "profileId는 양수여야 합니다.") Long profileId,
-            @Valid @RequestBody TechStackCreateRequest request
-    ) {
-        TechStackResponse response = service.createTechStack(profileId, request);
+            @Valid @RequestBody TechStackCreateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ) {
+        TechStackResponse response = service.createTechStack(profileId, userDetails.getMemberId(), request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
@@ -64,9 +67,10 @@ public class TechStackController {
     public ResponseEntity<ApiResponse<TechStackResponse>> updateTechStack(
             @PathVariable @Positive(message = "profileId는 양수여야 합니다.") Long profileId,
             @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id,
-            @Valid @RequestBody TechStackUpdateRequest request
+            @Valid @RequestBody TechStackUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        TechStackResponse response = service.updateTechStack(profileId, id, request);
+        TechStackResponse response = service.updateTechStack(profileId, userDetails.getMemberId(), id, request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
@@ -74,9 +78,10 @@ public class TechStackController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<TechStackDeleteResponse>> deleteTechStack(
             @PathVariable @Positive(message = "profileId는 양수여야 합니다.") Long profileId,
-            @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id
+            @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        TechStackDeleteResponse response = service.deleteTechStack(profileId, id);
+        TechStackDeleteResponse response = service.deleteTechStack(profileId, userDetails.getMemberId(), id);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 }

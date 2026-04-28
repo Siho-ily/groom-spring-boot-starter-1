@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.techstack.service;
 
+import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
@@ -11,6 +12,7 @@ import com.study.profile_stack_api.domain.techstack.entity.TechStack;
 import com.study.profile_stack_api.domain.techstack.mapper.TechStackMapper;
 import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
+import com.study.profile_stack_api.global.exception.domain.auth.ForbiddenOwnerMismatch;
 import com.study.profile_stack_api.global.exception.validation.request.InvalidRequestValueException;
 import com.study.profile_stack_api.global.exception.validation.request.NoUpdateRequestValueException;
 import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
@@ -29,7 +31,9 @@ public class TechStackService {
 
     // === GET ===
     public TechStackResponse getTechStackById(Long profileId, Long techStackId) {
-        existsProfileId(profileId);
+        if (!profileDao.existsById(profileId)) {
+            throw new ProfileNotFoundException(profileId);
+        }
 
         TechStack techStack = repository.findById(profileId, techStackId)
                 .orElseThrow(() -> new TechStackNotFoundException(techStackId));
@@ -38,7 +42,9 @@ public class TechStackService {
 
     public Page<TechStackResponse> getTechStacksWithPage(Integer page, Integer limit, Long profileId, TechCategory category, Proficiency proficiency) {
         // validation
-        existsProfileId(profileId);
+        if (!profileDao.existsById(profileId)) {
+            throw new ProfileNotFoundException(profileId);
+        }
         if (page != null && page < 0) {
             throw new InvalidRequestValueException("page", page.toString());
         }
@@ -62,8 +68,8 @@ public class TechStackService {
     }
 
     // === POST ===
-    public TechStackResponse createTechStack(Long profileId, TechStackCreateRequest request) {
-        existsProfileId(profileId);
+    public TechStackResponse createTechStack(Long profileId, Long memberId, TechStackCreateRequest request) {
+        verifyOwnership(profileId, memberId);
 
         TechStack techStack = mapper.toEntity(request);
         techStack.setProfileId(profileId);
@@ -72,13 +78,12 @@ public class TechStackService {
     }
 
     // === PUT ===
-    public TechStackResponse updateTechStack(Long profileId, Long techStackId, TechStackUpdateRequest request) {
+    public TechStackResponse updateTechStack(Long profileId, Long memberId, Long techStackId, TechStackUpdateRequest request) {
         if(request.hasNoUpdates()) {
             throw new NoUpdateRequestValueException();
         }
 
-        // validation 체크
-        existsProfileId(profileId);
+        verifyOwnership(profileId, memberId);
 
         TechStack entity = repository.findById(profileId, techStackId)
                 .orElseThrow(() -> new TechStackNotFoundException(techStackId));
@@ -89,18 +94,23 @@ public class TechStackService {
     }
 
     // === DELETE ===
-    public TechStackDeleteResponse deleteTechStack(Long profileId, Long techStackId) {
-        existsProfileId(profileId);
+    public TechStackDeleteResponse deleteTechStack(Long profileId, Long memberId, Long techStackId) {
+        verifyOwnership(profileId, memberId);
         repository.delete(profileId, techStackId);
 
         return TechStackDeleteResponse.from(techStackId);
     }
 
     // === Utils ===
-    // profileId 검증
-    private void existsProfileId(Long profileId) {
-        if (profileId != null && !profileDao.existsById(profileId)) {
-            throw new ProfileNotFoundException(profileId);
+    private Profile findProfile(Long profileId) {
+        return profileDao.findById(profileId)
+                .orElseThrow(() -> new ProfileNotFoundException(profileId));
+    }
+
+    private void verifyOwnership(Long profileId, Long memberId) {
+        Profile profile = findProfile(profileId);
+        if (!profile.getMemberId().equals(memberId)) {
+            throw new ForbiddenOwnerMismatch();
         }
     }
 }
