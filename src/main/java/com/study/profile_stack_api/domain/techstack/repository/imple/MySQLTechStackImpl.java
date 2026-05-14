@@ -7,7 +7,6 @@ import com.study.profile_stack_api.domain.techstack.repository.dao.TechStackDao;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.domain.techstack.TechStackNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary
 @RequiredArgsConstructor
 public class MySQLTechStackImpl implements TechStackDao {
     // DB 접근을 도와주는 jdbc 유틸

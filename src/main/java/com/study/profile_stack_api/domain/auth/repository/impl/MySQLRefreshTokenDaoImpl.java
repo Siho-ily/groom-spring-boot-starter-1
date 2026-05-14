@@ -4,7 +4,6 @@ import com.study.profile_stack_api.domain.auth.entity.RefreshToken;
 import com.study.profile_stack_api.domain.auth.repository.dao.RefreshTokenDao;
 import com.study.profile_stack_api.global.exception.domain.auth.RefreshTokenNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 @Repository
-@Primary
 @AllArgsConstructor
 public class MySQLRefreshTokenDaoImpl implements RefreshTokenDao {
     private final JdbcTemplate jdbcTemplate;

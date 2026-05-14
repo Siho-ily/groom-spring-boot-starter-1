@@ -5,7 +5,6 @@ import com.study.profile_stack_api.domain.auth.entity.Role;
 import com.study.profile_stack_api.domain.auth.repository.dao.MemberDao;
 import com.study.profile_stack_api.global.exception.domain.auth.MemberNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-@Primary
 @AllArgsConstructor
 public class MySQLMemberDaoImpl implements MemberDao {
     private JdbcTemplate jdbcTemplate;

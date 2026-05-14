@@ -5,7 +5,6 @@ import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.domain.profile.repository.dao.ProfileDao;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.domain.profile.ProfileNotFoundException;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary
 public class MySQLProfileDaoImpl implements ProfileDao {
     // DB 접근을 도와주는 jdbc 유틸
     private final JdbcTemplate jdbcTemplate;
