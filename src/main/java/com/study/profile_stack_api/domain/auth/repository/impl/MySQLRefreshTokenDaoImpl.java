@@ -92,7 +92,7 @@ public class MySQLRefreshTokenDaoImpl implements RefreshTokenDao {
     @Override
     public Boolean existByMemberId(Long memberId) {
         String sql = "select count(*) from refresh_token where memberId = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, memberId);
+        String sql = "select count(*) from refresh_token where member_id = ?";
         return count != null && count > 0;
     }
 
