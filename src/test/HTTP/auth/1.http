@@ -1,0 +1,31 @@
+### 회원가입
+POST http://localhost:8080/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+}
+
+
+### 로그인 (Access Token + Refresh Token 발급)
+# 응답에서 accessToken, refreshToken 값을 복사하여 이후 요청에 사용
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+  }
+
+### Access Token 재발급
+POST http://localhost:8080/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzc3MTA5OTA0LCJleHAiOjE3Nzc3MTQ3MDR9.iVinuUkwBte69WHEHiIxmczpzWWjrz0O0gqZCcqvkrIOf2LHRsF1Hkivjh03bD7N"
+}
+
+### 로그아웃
+POST http://localhost:8080/api/v1/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGVzIjoiUk9MRV9VU0VSLEZBQ1RPUl9QQVNTV09SRCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NzcxMTAyOTYsImV4cCI6MTc3NzExMjA5Nn0.eojuQox9jnsYO1zmnNV1mep5aTrGxEewgxhoAZFdlKYL2CjOyYEPVaS-RvhYmaaI

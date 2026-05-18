@@ -296,40 +296,40 @@ curl -X POST http://localhost:8080/api/v1/profiles/1/tech-stacks \
 - [x]  `Member` Entity 작성 (Lombok 적용)
 - [x]  `Role` Enum 작성 (`USER`, `ADMIN`)
 - [x]  `RefreshToken` Entity 작성
-- [ ]  `MemberDao` 인터페이스 및 구현체 작성
-- [ ]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
-- [ ]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
-- [ ]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
-- [ ]  `SignupRequest` 작성 (Bean Validation 적용)
-- [ ]  `LoginRequest`, `TokenRefreshRequest` 작성
-- [ ]  `LoginResponse` (accessToken + refreshToken), `TokenRefreshResponse` (accessToken) 작성
+- [x]  `MemberDao` 인터페이스 및 구현체 작성
+- [x]  `RefreshTokenDao` 인터페이스 및 구현체 작성 (`save`, `findByMemberId`, `deleteByMemberId`)
+- [x]  `CustomUserDetailsService` 구현 (`UserDetailsService` 구현체)
+- [x]  `PasswordEncoder` Bean 등록 (`BCryptPasswordEncoder`)
+- [x]  `SignupRequest` 작성 (Bean Validation 적용)
+- [x]  `LoginRequest`, `TokenRefreshRequest` 작성
+- [x]  `LoginResponse` (accessToken + refreshToken), `TokenRefreshResponse` (accessToken) 작성
 
 ### Phase 5: Spring Security — JWT 필터 및 설정
 
-- [ ]  `JwtTokenProvider` 구현 (`createAccessToken`, `createRefreshToken`, `getUsername`, `validateToken`)
-- [ ]  `JwtAuthenticationFilter` 구현 (`OncePerRequestFilter` 상속, `shouldNotFilter()` 오버라이드)
-- [ ]  `JwtAuthenticationEntryPoint` 구현 (토큰 에러 분기: `TOKEN_EXPIRED`, `INVALID_TOKEN`, `UNAUTHORIZED`)
-- [ ]  `SecurityConfig` 작성
-  - [ ]  CSRF 비활성화
-  - [ ]  세션 정책 `STATELESS` 설정
-  - [ ]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
-  - [ ]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
-  - [ ]  `JwtAuthenticationEntryPoint` 등록
-- [ ]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
-- [ ]  `AuthController` 구현 (signup, login, refresh, logout 엔드포인트)
-- [ ]  Postman으로 회원가입 → 로그인 → Access Token으로 API 호출 테스트
+- [x]  `JwtTokenProvider` 구현 (`createAccessToken`, `createRefreshToken`, `getUsername`, `validateToken`)
+- [x]  `JwtAuthenticationFilter` 구현 (`OncePerRequestFilter` 상속, `shouldNotFilter()` 오버라이드)
+- [x]  `JwtAuthenticationEntryPoint` 구현 (토큰 에러 분기: `TOKEN_EXPIRED`, `INVALID_TOKEN`, `UNAUTHORIZED`)
+- [x]  `SecurityConfig` 작성
+  - [x]  CSRF 비활성화
+  - [x]  세션 정책 `STATELESS` 설정
+  - [x]  인가 규칙 설정 (GET은 허용, CUD는 인증 필요)
+  - [x]  `addFilterBefore`로 `JwtAuthenticationFilter` 등록
+  - [x]  `JwtAuthenticationEntryPoint` 등록
+- [x]  `AuthService` 구현 (회원가입, 로그인, 토큰 재발급, 로그아웃)
+- [x]  `AuthController` 구현 (signup, login, refresh, logout 엔드포인트)
+- [x]  Postman으로 회원가입 → 로그인 → Access Token으로 API 호출 테스트
 
 ### Phase 6: 소유권 검증 적용
 
-- [ ]  `profile` 테이블에 `member_id` 컬럼 추가 (schema.sql 수정)
-- [ ]  `Profile` Entity에 `memberId` 필드 추가
-- [ ]  `ProfileDao`에 `member_id` 관련 쿼리 추가 (`findByMemberId`, INSERT 시 `member_id` 포함)
-- [ ]  `ProfileService`에 소유권 검증 로직 추가 (수정/삭제 시 `memberId` 확인)
-- [ ]  `TechStackService`에 소유권 검증 로직 추가 (해당 프로필의 소유자인지 확인)
-- [ ]  `ProfileController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
-- [ ]  `TechStackController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
-- [ ]  `UnauthorizedException` 작성 + `GlobalExceptionHandler`에 처리 추가
-- [ ]  Postman으로 소유권 검증 테스트 (A 사용자로 B의 프로필 수정 시도 → 거부 확인)
+- [x]  `profile` 테이블에 `member_id` 컬럼 추가 (schema.sql 수정)
+- [x]  `Profile` Entity에 `memberId` 필드 추가
+- [x]  `ProfileDao`에 `member_id` 관련 쿼리 추가 (`findByMemberId`, INSERT 시 `member_id` 포함)
+- [x]  `ProfileService`에 소유권 검증 로직 추가 (수정/삭제 시 `memberId` 확인)
+- [x]  `TechStackService`에 소유권 검증 로직 추가 (해당 프로필의 소유자인지 확인)
+- [x]  `ProfileController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
+- [x]  `TechStackController`에 `@AuthenticationPrincipal UserDetails` 파라미터 추가
+- [x]  `UnauthorizedException` 작성 + `GlobalExceptionHandler`에 처리 추가
+- [x]  Postman으로 소유권 검증 테스트 (A 사용자로 B의 프로필 수정 시도 → 거부 확인)
 
 ## 아키텍처
 

@@ -15,6 +15,7 @@ public interface ProfileDao {
 
     // === Read ===
     Optional<Profile> findById(Long id);                        // 단건 조회
+    Optional<Profile> findByMemberId(Long memberId);
     Page<Profile> findWithPage(Integer offset, Integer limit, String name, Position position);          // 페이징 조회
 
     // === Update ===

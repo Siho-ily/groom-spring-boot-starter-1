@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.profile.controller;
 
+import com.study.profile_stack_api.domain.auth.service.CustomUserDetails;
 import com.study.profile_stack_api.domain.profile.dto.request.ProfileCreateRequest;
 import com.study.profile_stack_api.domain.profile.dto.request.ProfileUpdateRequest;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResponse;
@@ -15,6 +16,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +55,7 @@ public class ProfileController {
     @PostMapping
     public ResponseEntity<ApiResponse<ProfileResponse>> createProfile(
             @RequestBody @Valid ProfileCreateRequest request
+
     ) {
         ProfileResponse response = profileService.createProfile(request);
         return ResponseEntity
@@ -64,18 +67,20 @@ public class ProfileController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProfileResponse>> updateProfile(
             @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id,
-            @RequestBody @Valid ProfileUpdateRequest request
+            @RequestBody @Valid ProfileUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        ProfileResponse response = profileService.updateProfileById(id, request);
+        ProfileResponse response = profileService.updateProfileById(id, userDetails.getMemberId(), request);
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<ProfileDeleteResponse>> deleteProfile(
-            @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id
+            @PathVariable @Positive(message = "id는 양수여야 합니다.") Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        ProfileDeleteResponse response = profileService.deleteProfileById(id);
+        ProfileDeleteResponse response = profileService.deleteProfileById(id, userDetails.getMemberId());
         return ResponseEntity.ok().body(ApiResponse.success(response));
     }
 }

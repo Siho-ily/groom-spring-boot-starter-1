@@ -1,5 +1,6 @@
 package com.study.profile_stack_api.domain.auth.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,14 +8,27 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "member")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Member {
-    private Long id;                    // id
-    private String userId;              // 유저 id
-    private String password;            // Bcrypt로 인코딩된 패스워드
-    private String role;                // 권한
-    private LocalDateTime createAt;     // 생성일
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String username;
+
+    @Column(nullable = false, length = 100)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 }
