@@ -100,7 +100,7 @@ public class AuthService {
             LocalDateTime expiredDate = jwtTokenProvider.getExpirationFromToken(refreshToken);
             LocalDateTime createdDate = jwtTokenProvider.getCreatedAtFromToken(refreshToken);
             RefreshToken token = refreshTokenMapper.toEntity(member, refreshToken, expiredDate, createdDate);
-            refreshTokenDao.save(token);
+            refreshTokenDao.save(token).orElseThrow(() -> new RuntimeException("Failed to save refresh token"));
 
             log.info("Login successful for user: {}", member.getUsername());
 
